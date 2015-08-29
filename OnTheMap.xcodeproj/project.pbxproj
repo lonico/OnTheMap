@@ -13,6 +13,7 @@
 		C082D9B51B9017BF00D04C2F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C082D9B41B9017BF00D04C2F /* Images.xcassets */; };
 		C082D9B81B9017BF00D04C2F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C082D9B61B9017BF00D04C2F /* LaunchScreen.xib */; };
 		C082D9C41B9017BF00D04C2F /* OnTheMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C082D9C31B9017BF00D04C2F /* OnTheMapTests.swift */; };
+		C082D9CE1B91520700D04C2F /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C082D9CD1B91520700D04C2F /* LoginViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,7 @@
 		C082D9BD1B9017BF00D04C2F /* OnTheMapTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OnTheMapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C082D9C21B9017BF00D04C2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C082D9C31B9017BF00D04C2F /* OnTheMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnTheMapTests.swift; sourceTree = "<group>"; };
+		C082D9CD1B91520700D04C2F /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 			children = (
 				C082D9AD1B9017BF00D04C2F /* AppDelegate.swift */,
 				C082D9AF1B9017BF00D04C2F /* ViewController.swift */,
+				C082D9CD1B91520700D04C2F /* LoginViewController.swift */,
 				C082D9B11B9017BF00D04C2F /* Main.storyboard */,
 				C082D9B41B9017BF00D04C2F /* Images.xcassets */,
 				C082D9B61B9017BF00D04C2F /* LaunchScreen.xib */,
@@ -161,6 +164,7 @@
 				TargetAttributes = {
 					C082D9A71B9017BF00D04C2F = {
 						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = DZY4SPA4J6;
 					};
 					C082D9BC1B9017BF00D04C2F = {
 						CreatedOnToolsVersion = 6.4;
@@ -212,6 +216,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C082D9CE1B91520700D04C2F /* LoginViewController.swift in Sources */,
 				C082D9B01B9017BF00D04C2F /* ViewController.swift in Sources */,
 				C082D9AE1B9017BF00D04C2F /* AppDelegate.swift in Sources */,
 			);
@@ -340,6 +345,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = OnTheMap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -350,6 +356,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = OnTheMap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
