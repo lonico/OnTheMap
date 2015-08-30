@@ -7,20 +7,56 @@
 //
 
 import UIKit
+import FBSDKLoginKit
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var statusLabel: UILabel!
+    @IBOutlet weak var facebookLoginButton: FBSDKLoginButton!
     
     var udacity_session_id: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+    
     }
-
+    
+    // MARK - FBSDKLoginButtonDelegate functions
+    
+    func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
+        println("logingbuttondidcomplete")
+        if let error = error {
+            var errorMsg = "Facebook login failed " + error.domain + ": " + error.description
+            statusLabel.text = errorMsg
+        } else {
+            if let token = result!.token {
+                print("SUCCESS: ")
+                println(token)
+                loginWithFacebook() { success, errorMsg in
+                    if success {
+                        self.completeLogin()
+                    } else {
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.statusLabel.text = errorMsg
+                        }
+                    }
+                }
+            } else {
+                println("NOT LOGGED")
+                statusLabel.text = "Facebook login failed"
+            }
+        }
+    }
+    
+    func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
+        println("logingbuttondidlogout")
+    }
+    
+    // MARK - action buttons
+    // FB login button does not require an action
     
     @IBAction func loginButtonTouchUp(sender: UIButton) {
         
@@ -40,7 +76,7 @@ class LoginViewController: UIViewController {
         }
         statusLabel.text = ""
         
-        login(email, password: password) { success, errorMsg in
+        loginWithEmailID(email, password: password) { success, errorMsg in
             if success {
                 self.completeLogin()
             } else {
@@ -48,10 +84,8 @@ class LoginViewController: UIViewController {
                     self.statusLabel.text = errorMsg
                 }
             }
-            
         }
     }
-    
     
     @IBAction func signUpTouchUp(sender: UIButton) {
         if let udacityLink = NSURL(string : "https://www.udacity.com/account/auth#!/signup") {
@@ -59,14 +93,26 @@ class LoginViewController: UIViewController {
         }
     }
     
+    // MARK - support functions
     
-        
-    func login(email: String, password: String, completion_handler: (success: Bool, errorMsg: String?) -> Void) {
+    func loginWithEmailID(emailId: String, password: String, completion_handler: (success: Bool, errorMsg: String?) -> Void) {
+        let hTTPBody = "{\"udacity\": {\"username\": \"\(emailId)\", \"password\": \"\(password)\"}}"
+        login(hTTPBody, completion_handler: completion_handler)
+    }
+    
+    func loginWithFacebook(completion_handler: (success: Bool, errorMsg: String?) -> Void) {
+        let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
+        println(accessToken)
+        let hTTPBody = "{\"facebook_mobile\": {\"access_token\":\"\(accessToken)\"}}"
+        login(hTTPBody, completion_handler: completion_handler)
+    }
+    
+    func login(httpBody: String, completion_handler: (success: Bool, errorMsg: String?) -> Void) {
         let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
         request.HTTPMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.HTTPBody = "{\"udacity\": {\"username\": \"\(email)\", \"password\": \"\(password)\"}}".dataUsingEncoding(NSUTF8StringEncoding)
+        request.HTTPBody = httpBody.dataUsingEncoding(NSUTF8StringEncoding)
         let session = NSURLSession.sharedSession()
     
         let task = session.dataTaskWithRequest(request) { data, response, error in
@@ -76,7 +122,7 @@ class LoginViewController: UIViewController {
                 errorMsg = "Login error: " + error.localizedDescription
             } else {
                 let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5)) /* subset response data! */
-                // println(NSString(data: newData, encoding: NSUTF8StringEncoding))
+                println(NSString(data: newData, encoding: NSUTF8StringEncoding))
                 parseJSONWithCompletionHandler(newData) { result, error in
                     if let error = error {
                         errorMsg = "Login error: " + error.localizedDescription
@@ -105,26 +151,12 @@ class LoginViewController: UIViewController {
         task.resume()
     }
     
-    func loginWithFacebook(completion_handler: (success: Bool, errorMsg: String?) -> Void) {
-        let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
-        request.HTTPMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.HTTPBody = "{\"facebook_mobile\": {\"access_token\": \"DADFMS4SN9e8BAD6vMs6yWuEcrJlMZChFB0ZB0PCLZBY8FPFYxIPy1WOr402QurYWm7hj1ZCoeoXhAk2tekZBIddkYLAtwQ7PuTPGSERwH1DfZC5XSef3TQy1pyuAPBp5JJ364uFuGw6EDaxPZBIZBLg192U8vL7mZAzYUSJsZA8NxcqQgZCKdK4ZBA2l2ZA6Y1ZBWHifSM0slybL9xJm3ZBbTXSBZCMItjnZBH25irLhIvbxj01QmlKKP3iOnl8Ey;\"}}".dataUsingEncoding(NSUTF8StringEncoding)
-        let session = NSURLSession.sharedSession()
-        let task = session.dataTaskWithRequest(request) { data, response, error in
-            if error != nil {
-                // Handle error...
-                return
-            }
-            let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5)) /* subset response data! */
-            println(NSString(data: newData, encoding: NSUTF8StringEncoding))
-        }
-        task.resume()
-    }
-    
     func completeLogin() {
         println("Login Successful")
+        dispatch_async(dispatch_get_main_queue()) {
+            self.statusLabel.text = ""
+        }
+
     }
 }
 
