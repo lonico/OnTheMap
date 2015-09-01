@@ -98,6 +98,10 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     func completeLogin() {
         println("Login Successful")
         self.dispatch_status_update("")
+        dispatch_sync(dispatch_get_main_queue()) {
+            let controller = self.storyboard!.instantiateViewControllerWithIdentifier("navViewController") as! UIViewController
+            self.presentViewController(controller, animated: true, completion: nil)
+        }
     }
     
 }

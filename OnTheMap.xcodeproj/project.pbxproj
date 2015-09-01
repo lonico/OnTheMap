@@ -17,6 +17,8 @@
 		C082D9D11B917B2C00D04C2F /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C082D9D01B917B2C00D04C2F /* FBSDKLoginKit.framework */; };
 		C082D9D91B93A54500D04C2F /* UdacityClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C082D9D81B93A54500D04C2F /* UdacityClient.swift */; };
 		C082D9DB1B93A6B800D04C2F /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C082D9DA1B93A6B800D04C2F /* FBSDKCoreKit.framework */; };
+		C082D9DD1B955F4A00D04C2F /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C082D9DC1B955F4A00D04C2F /* MapViewController.swift */; };
+		C082D9E91B95745F00D04C2F /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C082D9E81B95745F00D04C2F /* TabBarViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +46,8 @@
 		C082D9D01B917B2C00D04C2F /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "../../../Downloads/FacebookSDKs-iOS-20150813/FBSDKLoginKit.framework"; sourceTree = "<group>"; };
 		C082D9D81B93A54500D04C2F /* UdacityClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityClient.swift; sourceTree = "<group>"; };
 		C082D9DA1B93A6B800D04C2F /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "../../../Downloads/FacebookSDKs-iOS-20150813/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
+		C082D9DC1B955F4A00D04C2F /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		C082D9E81B95745F00D04C2F /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +95,8 @@
 				C082D9AD1B9017BF00D04C2F /* AppDelegate.swift */,
 				C082D9AF1B9017BF00D04C2F /* ViewController.swift */,
 				C082D9CD1B91520700D04C2F /* LoginViewController.swift */,
+				C082D9DC1B955F4A00D04C2F /* MapViewController.swift */,
+				C082D9E81B95745F00D04C2F /* TabBarViewController.swift */,
 				C082D9D81B93A54500D04C2F /* UdacityClient.swift */,
 				C082D9B11B9017BF00D04C2F /* Main.storyboard */,
 				C082D9B41B9017BF00D04C2F /* Images.xcassets */,
@@ -238,6 +244,8 @@
 				C082D9D91B93A54500D04C2F /* UdacityClient.swift in Sources */,
 				C082D9CE1B91520700D04C2F /* LoginViewController.swift in Sources */,
 				C082D9B01B9017BF00D04C2F /* ViewController.swift in Sources */,
+				C082D9E91B95745F00D04C2F /* TabBarViewController.swift in Sources */,
+				C082D9DD1B955F4A00D04C2F /* MapViewController.swift in Sources */,
 				C082D9AE1B9017BF00D04C2F /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
