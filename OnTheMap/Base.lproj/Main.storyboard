@@ -143,25 +143,13 @@
                                     <outlet property="delegate" destination="vXZ-lx-hvc" id="kIi-Dh-zUv"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="Kpl-x0-dds" userLabel="Status">
-                                <rect key="frame" x="36" y="381" width="528" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="yrq-Zs-g1f"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="Kpl-x0-dds" firstAttribute="top" secondItem="amw-mV-VKU" secondAttribute="bottom" constant="5" id="356-eC-LUs"/>
                             <constraint firstAttribute="centerX" secondItem="vJP-6M-VkU" secondAttribute="centerX" id="4xp-67-moc"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="gby-ta-UPU" secondAttribute="bottom" constant="20" id="5Hd-gA-7sE"/>
                             <constraint firstAttribute="trailingMargin" secondItem="gby-ta-UPU" secondAttribute="trailing" constant="4" id="6I1-fH-cmv"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="Kpl-x0-dds" secondAttribute="trailing" constant="20" id="FMf-yC-EWr"/>
                             <constraint firstItem="vJP-6M-VkU" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="QCc-T8-j4V"/>
-                            <constraint firstItem="Kpl-x0-dds" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="20" id="Wk1-ao-Rmh"/>
                             <constraint firstItem="gby-ta-UPU" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="4" id="cho-w9-XoU"/>
                             <constraint firstAttribute="centerY" secondItem="vJP-6M-VkU" secondAttribute="centerY" id="k5i-RD-Rav"/>
                         </constraints>
@@ -170,7 +158,6 @@
                         <outlet property="emailTextField" destination="8c1-KQ-wsh" id="SJt-bm-6TX"/>
                         <outlet property="facebookLoginButton" destination="gby-ta-UPU" id="YvQ-yf-Zt5"/>
                         <outlet property="passwordTextField" destination="fLL-Lh-wNS" id="mVA-Ur-iAz"/>
-                        <outlet property="statusLabel" destination="Kpl-x0-dds" id="ON1-q6-AZv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
@@ -190,7 +177,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" systemItem="recents" id="diQ-su-gAx"/>
+                    <tabBarItem key="tabBarItem" image="list" id="diQ-su-gAx"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZLe-0A-4cE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -207,21 +194,34 @@
                     <view key="view" contentMode="scaleToFill" id="SGq-mW-I4q">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Z2V-LA-a1a">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </mapView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="Z2V-LA-a1a" firstAttribute="leading" secondItem="SGq-mW-I4q" secondAttribute="leading" id="9p8-Cj-H66"/>
+                            <constraint firstItem="Z2V-LA-a1a" firstAttribute="top" secondItem="SGq-mW-I4q" secondAttribute="top" id="T6Z-cJ-U3O"/>
+                            <constraint firstAttribute="trailing" secondItem="Z2V-LA-a1a" secondAttribute="trailing" id="VXt-R6-3gP"/>
+                            <constraint firstItem="bg4-Jq-xvC" firstAttribute="top" secondItem="Z2V-LA-a1a" secondAttribute="bottom" id="g3C-qF-eKx"/>
+                        </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" systemItem="more" id="5Wk-t3-TtX"/>
+                    <tabBarItem key="tabBarItem" image="map" id="5Wk-t3-TtX"/>
                     <toolbarItems/>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="mapView" destination="Z2V-LA-a1a" id="55s-MP-hby"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vgP-Zf-A8w" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2423" y="-230"/>
+            <point key="canvasLocation" x="2449" y="-147"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="bLI-P3-o4W">
             <objects>
                 <navigationController storyboardIdentifier="navViewController" id="EMW-mI-3kk" userLabel="Navigation Controller" sceneMemberID="viewController">
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="hzW-28-zLt">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -260,12 +260,12 @@
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yaR-OA-O8h" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <barButtonItem title="Refresh" id="PbX-hS-qCP">
+                <barButtonItem systemItem="refresh" id="PbX-hS-qCP">
                     <connections>
                         <action selector="refreshButtonTouch:" destination="tC8-up-gzl" id="HM7-IU-c49"/>
                     </connections>
                 </barButtonItem>
-                <barButtonItem title="Pin" id="1z3-XG-SHV">
+                <barButtonItem image="pin" id="1z3-XG-SHV">
                     <connections>
                         <action selector="pinButtonTouched:" destination="tC8-up-gzl" id="TPH-ml-Hn1"/>
                     </connections>
@@ -274,4 +274,9 @@
             <point key="canvasLocation" x="1515" y="150"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="list" width="32" height="32"/>
+        <image name="map" width="32" height="32"/>
+        <image name="pin" width="32" height="32"/>
+    </resources>
 </document>

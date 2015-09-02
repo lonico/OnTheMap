@@ -44,29 +44,29 @@ class UdacityCLient: NSObject {
             var success = false
             var errorMsg: String! = nil
             if error != nil {
-                errorMsg = "Login error: " + error.localizedDescription
+                errorMsg = error.localizedDescription
             } else {
                 let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5)) /* subset response data! */
                 // println(NSString(data: newData, encoding: NSUTF8StringEncoding))
                 self.parseJSONWithCompletionHandler(newData) { result, error in
                     if let error = error {
-                        errorMsg = "Login error: " + error.localizedDescription
+                        errorMsg = error.localizedDescription
                     } else {
                         if let session_dict = result.valueForKey("session") as? [String: String] {
                             if let session_id = session_dict["id"] {
                                 self.udacity_session_id = session_id
                                 success = true
                             } else {
-                                errorMsg = "Unexpected login error, no 'id' field"
+                                errorMsg = "Unexpected error, no 'id' field"
                             }
                         } else if let status = result.valueForKey("status") as? Int {
-                            errorMsg = "Login error:"
+                            errorMsg = ""
                             if let errorStr = result.valueForKey("error") as? String {
-                                errorMsg = errorMsg + " " + errorStr
+                                errorMsg = errorStr
                             }
                             errorMsg = errorMsg + " (\(status))"
                         } else {
-                            errorMsg = "Unexpected login error, no 'session' field"
+                            errorMsg = "Unexpected error, no 'session' field"
                         }
                     }
                     completion_handler(success: success, errorMsg: errorMsg)
@@ -99,23 +99,23 @@ class UdacityCLient: NSObject {
             // println(NSString(data: newData, encoding: NSUTF8StringEncoding))
             self.parseJSONWithCompletionHandler(newData) { result, error in
                 if let error = error {
-                    errorMsg = "Logout error: " + error.localizedDescription
+                    errorMsg = error.localizedDescription
                 } else {
                     if let session_dict = result.valueForKey("session") as? [String: String] {
                         if let session_id = session_dict["id"] {
                             self.udacity_session_id = session_id
                             success = true
                         } else {
-                            errorMsg = "Unexpected login error, no 'id' field"
+                            errorMsg = "Unexpected error, no 'id' field"
                         }
                     } else if let status = result.valueForKey("status") as? Int {
-                        errorMsg = "Login error:"
+                        errorMsg = ""
                         if let errorStr = result.valueForKey("error") as? String {
-                            errorMsg = errorMsg + " " + errorStr
+                            errorMsg = errorStr
                         }
                         errorMsg = errorMsg + " (\(status))"
                     } else {
-                        errorMsg = "Unexpected login error, no 'session' field"
+                        errorMsg = "Unexpected error, no 'session' field"
                     }
                 }
                 completion_handler(success: success, errorMsg: errorMsg)

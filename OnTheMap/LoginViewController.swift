@@ -13,27 +13,28 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var facebookLoginButton: FBSDKLoginButton!
     
     // MARK - FBSDKLoginButtonDelegate functions
     
     func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
         
+        let alertTitle = "Facebook login failed"
         if let error = error {
-            let errorMsg = "Facebook login failed " + error.domain + ": " + error.description
-            statusLabel.text = errorMsg
+            let errorMsg = error.domain + ": " + error.description
+            showAlert(errorMsg, title: title)
         } else {
             if let token = result!.token {
                 UdacityCLient.shared_instance().loginWithFacebook() { success, errorMsg in
                     if success {
                         self.completeLogin()
                     } else {
-                        self.dispatch_status_update(errorMsg)
+                        self.dispatchAlert(errorMsg, title: alertTitle)
                     }
                 }
             } else {
-                statusLabel.text = "Facebook login failed"
+                let errorMsg = "no token"
+                showAlert(errorMsg, title: alertTitle)
             }
         }
     }
@@ -47,7 +48,8 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
             } else {
                 msg = errorMsg
             }
-            self.dispatch_status_update(msg)
+            let alertTitle = "Facebook login failed"
+            self.dispatchAlert(msg, title: alertTitle)
         }
     }
     
@@ -58,22 +60,23 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         let email = emailTextField.text
         let password = passwordTextField.text
+        let alertTitle = "Login error"
         
         emailTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
         
         if email == "" {
-            statusLabel.text = "Empty email field"
+            let msg = "Empty email field"
+            showAlert(msg, title: alertTitle)
         } else if password == "" {
-            statusLabel.text = "Empty password field"
+            let msg = "Empty password field"
+            showAlert(msg, title: alertTitle)
         } else {
-            statusLabel.text = ""
-            
             UdacityCLient.shared_instance().loginWithEmailID(email, password: password) { success, errorMsg in
                 if success {
                     self.completeLogin()
                 } else {
-                    self.dispatch_status_update(errorMsg)
+                    self.dispatchAlert(errorMsg, title: alertTitle)
                 }
             }
         }
@@ -87,17 +90,33 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     
     // MARK - UI update functions
     
-    func dispatch_status_update(msg: String?) {
+    func dispatchAlert(msg: String?, title: String?) {
         if let msg = msg {
             dispatch_async(dispatch_get_main_queue()) {
-                self.statusLabel.text = msg
+                self.showAlert(msg, title: title)
             }
+            
         }
+    }
+    
+    func showAlert(msg: String?, var title: String?) {
+        
+        if title == nil {
+            title = "Alert"
+        }
+        
+        let alertController = UIAlertController(title: title, message: msg, preferredStyle: .Alert)
+        
+        //Create and add the Cancel action
+        let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
+            //Just dismiss the alert
+        }
+        alertController.addAction(cancelAction)
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
     
     func completeLogin() {
         println("Login Successful")
-        self.dispatch_status_update("")
         dispatch_sync(dispatch_get_main_queue()) {
             let controller = self.storyboard!.instantiateViewControllerWithIdentifier("navViewController") as! UIViewController
             self.presentViewController(controller, animated: true, completion: nil)
