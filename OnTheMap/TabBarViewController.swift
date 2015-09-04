@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FBSDKLoginKit
 
 class TabBarViewController: UITabBarController {
     
@@ -35,17 +36,15 @@ class TabBarViewController: UITabBarController {
             var msg: String? = ""
             if success {
                 println("Logged out")
+                //FBSDKLoginManager.logOut()
             } else {
-                msg = errorMsg
-                println("msg")
+                println(errorMsg)
             }
             dispatch_async(dispatch_get_main_queue()) {
                 let controller = self.storyboard!.instantiateViewControllerWithIdentifier("loginViewController") as! UIViewController
-                self.presentViewController(controller, animated: true, completion: nil)            }
-
+                self.presentViewController(controller, animated: true, completion: nil)
+            }
         }
-
-        
     }
 }
 

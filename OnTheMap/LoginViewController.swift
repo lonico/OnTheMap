@@ -15,6 +15,15 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var facebookLoginButton: FBSDKLoginButton!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+        let accessToken = FBSDKAccessToken.currentAccessToken()
+        if let accessToken = accessToken {
+            println("already logged in")
+        }
+    }
+    
     // MARK - FBSDKLoginButtonDelegate functions
     
     func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
@@ -25,13 +34,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
             showAlert(errorMsg, title: title)
         } else {
             if let token = result!.token {
-                UdacityCLient.shared_instance().loginWithFacebook() { success, errorMsg in
-                    if success {
-                        self.completeLogin()
-                    } else {
-                        self.dispatchAlert(errorMsg, title: alertTitle)
-                    }
-                }
+                loginWithFB(alertTitle)
             } else {
                 let errorMsg = "no token"
                 showAlert(errorMsg, title: alertTitle)
@@ -72,13 +75,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
             let msg = "Empty password field"
             showAlert(msg, title: alertTitle)
         } else {
-            UdacityCLient.shared_instance().loginWithEmailID(email, password: password) { success, errorMsg in
-                if success {
-                    self.completeLogin()
-                } else {
-                    self.dispatchAlert(errorMsg, title: alertTitle)
-                }
-            }
+            loginWithEmailID(email, password: password, alertTitle: alertTitle)
         }
     }
     
@@ -115,6 +112,26 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
+    func loginWithFB(alertTitle: String) -> Void {
+        UdacityCLient.shared_instance().loginWithFacebook() { success, errorMsg in
+            if success {
+                self.completeLogin()
+            } else {
+                self.dispatchAlert(errorMsg, title: alertTitle)
+            }
+        }
+    }
+    
+    func loginWithEmailID(email: String , password: String, alertTitle: String) -> Void {
+        UdacityCLient.shared_instance().loginWithEmailID(email, password: password) { success, errorMsg in
+            if success {
+                self.completeLogin()
+            } else {
+                self.dispatchAlert(errorMsg, title: alertTitle)
+            }
+        }
+    }
+   
     func completeLogin() {
         println("Login Successful")
         dispatch_sync(dispatch_get_main_queue()) {

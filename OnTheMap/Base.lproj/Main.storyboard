@@ -164,19 +164,27 @@
             </objects>
             <point key="canvasLocation" x="218" y="150"/>
         </scene>
-        <!--View Controller-->
+        <!--Table View Controller-->
         <scene sceneID="vgZ-Ei-9Vj">
             <objects>
-                <viewController id="mP7-wd-TAc" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="5TM-aT-8NK"/>
-                        <viewControllerLayoutGuide type="bottom" id="zbn-fQ-plZ"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Etw-Rq-MKb">
+                <viewController id="mP7-wd-TAc" userLabel="Table View Controller" customClass="TableViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="5Wi-yL-Zie">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="studentCell" id="iUU-20-9Un">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="iUU-20-9Un" id="cEo-m1-1ck">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="mP7-wd-TAc" id="lGh-JZ-14D"/>
+                            <outlet property="delegate" destination="mP7-wd-TAc" id="2GT-x0-NFv"/>
+                        </connections>
+                    </tableView>
                     <tabBarItem key="tabBarItem" image="list" id="diQ-su-gAx"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZLe-0A-4cE" userLabel="First Responder" sceneMemberID="firstResponder"/>

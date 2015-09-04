@@ -13,6 +13,7 @@ class UdacityCLient: NSObject {
     
     var session: NSURLSession
     var udacity_session_id: String!
+    var udacity_user_id: String!
     
     override init () {
         session = NSURLSession.sharedSession()
@@ -68,6 +69,19 @@ class UdacityCLient: NSObject {
                         } else {
                             errorMsg = "Unexpected error, no 'session' field"
                         }
+                        if (success) {
+                            if let account_dict = result.valueForKey("account") as? [String: String] {
+                                if let user_id = account_dict["key"] {
+                                    self.udacity_user_id = user_id
+                                    success = true
+                                } else {
+                                    errorMsg = "Unexpected error, no 'key' field"
+                                }
+                            } else {
+                                errorMsg = "Unexpected error, no 'account' field"
+                            }
+
+                        }
                     }
                     completion_handler(success: success, errorMsg: errorMsg)
                 }
@@ -77,6 +91,24 @@ class UdacityCLient: NSObject {
     }
     
     func logout(completion_handler: (success: Bool, errorMsg: String?) -> Void) {
+        
+        logoutFromUdacity() { success, errorMsg in
+            self.logoutFromFB()
+            completion_handler(success: success, errorMsg: errorMsg)
+                
+        }
+    }
+        
+    func logoutFromFB() -> Void {
+        if let accessToken = FBSDKAccessToken.currentAccessToken() {
+            FBSDKLoginManager().logOut()
+        }
+        else {
+            println("Already logged out")
+        }
+    }
+    
+    func logoutFromUdacity(completion_handler: (success: Bool, errorMsg: String?) -> Void) {
     
         let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
         request.HTTPMethod = "DELETE"
@@ -125,6 +157,22 @@ class UdacityCLient: NSObject {
     task.resume()
     }
 
+    func getDataForUser(userid: String, completion_handler: (success: Bool, errorMsg: String?) -> Void) {
+    
+        let url = NSURL(string: "https://www.udacity.com/api/users/\(userid)")!
+        let request = NSMutableURLRequest(URL: url)
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithRequest(request) { data, response, error in
+            if error != nil { // Handle error...
+                return
+            }
+            let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5)) /* subset response data! */
+            println(NSString(data: newData, encoding: NSUTF8StringEncoding))
+        }
+        task.resume()
+        
+    }
+    
     class func shared_instance() -> UdacityCLient {
 
         struct Singleton {
