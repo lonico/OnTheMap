@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FBSDKLoginKit
 
 class TabBarViewController: UITabBarController {
     
@@ -17,28 +16,25 @@ class TabBarViewController: UITabBarController {
     override func viewWillAppear(animated: Bool) {
         let rightButtons = [refreshButton, pinButton]
         self.navigationItem.setRightBarButtonItems(rightButtons, animated: true)
-        println("I was here")
         super.viewWillAppear(animated)
     }
     
-    
     @IBAction func pinButtonTouched(sender: UIBarButtonItem) {
-        println("pinned!")
+        println("pinned!")      // TODO
     }
     
     @IBAction func refreshButtonTouch(sender: UIBarButtonItem) {
-        println("refreshed")
+        println("refreshed")    // TODO
     }
     
     @IBAction func logoutButtonTouch(sender: UIBarButtonItem) {
-        println("logging out")
+        println(">>> Logging out")
         UdacityCLient.shared_instance().logout() { success, errorMsg in
             var msg: String? = ""
             if success {
-                println("Logged out")
-                //FBSDKLoginManager.logOut()
+                println(">>> Logged out")
             } else {
-                println(errorMsg)
+                println(">>> \(errorMsg)")
             }
             dispatch_async(dispatch_get_main_queue()) {
                 let controller = self.storyboard!.instantiateViewControllerWithIdentifier("loginViewController") as! UIViewController

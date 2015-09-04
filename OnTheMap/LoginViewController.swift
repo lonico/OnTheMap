@@ -20,7 +20,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         // Do any additional setup after loading the view, typically from a nib.
         let accessToken = FBSDKAccessToken.currentAccessToken()
         if let accessToken = accessToken {
-            println("already logged in")
+            println(">>> already logged in")
         }
     }
     
@@ -47,7 +47,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         UdacityCLient.shared_instance().logout() { success, errorMsg in
             var msg: String? = ""
             if success {
-                println("Logged out")
+                println(">>> Logged out")
             } else {
                 msg = errorMsg
             }
@@ -133,7 +133,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     }
    
     func completeLogin() {
-        println("Login Successful")
+        println(">>> Login Successful")
         dispatch_sync(dispatch_get_main_queue()) {
             let controller = self.storyboard!.instantiateViewControllerWithIdentifier("navViewController") as! UIViewController
             self.presentViewController(controller, animated: true, completion: nil)

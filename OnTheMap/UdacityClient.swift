@@ -104,7 +104,7 @@ class UdacityCLient: NSObject {
             FBSDKLoginManager().logOut()
         }
         else {
-            println("Already logged out")
+            println(">>> Already logged out")
         }
     }
     

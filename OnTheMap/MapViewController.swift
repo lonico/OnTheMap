@@ -59,12 +59,12 @@ class MapViewController: UIViewController , MKMapViewDelegate {
         
     }
     
-    override func viewWillLayoutSubviews() {
-        println("viewWillLayoutSubviews")
+    //override func viewWillLayoutSubviews() {
+        //println(">>> viewWillLayoutSubviews")   // TODO
         //self.mapView.frame = self.view.bounds
-        println(self.mapView.frame)
-        println(self.view.bounds)
-    }
+        //println(self.mapView.frame)             // TODO
+        //println(self.view.bounds)               // TODO
+    //}
     
     // MARK: - MKMapViewDelegate
     
