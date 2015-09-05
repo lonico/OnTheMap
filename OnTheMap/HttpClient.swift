@@ -17,13 +17,21 @@ class HttpClient: NSObject {
         super.init()
     }
     
-    func httpGet(urlString: String, parameters: [String:AnyObject]!, completion_handler: (data: NSData!, error: String!) -> Void) {
+    func httpGet(urlString: String, parameters: [String:AnyObject]!, httpHeaderFields: [String: String]!, completion_handler: (data: NSData!, error: String!) -> Void) {
         
         let urlWithParams = urlString + HttpClient.escapedParameters(parameters)
         
         let request = NSMutableURLRequest(URL: NSURL(string: urlWithParams)!)
         request.HTTPMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        if (httpHeaderFields != nil) {
+            for (key, value) in httpHeaderFields {
+                request.addValue(value, forHTTPHeaderField: key)
+            }
+        }
+        
+        
         
         let task = session.dataTaskWithRequest(request) { data, response, error in
             var dataWithOffset: NSData! = nil
@@ -131,6 +139,21 @@ class HttpClient: NSObject {
         }
         
         return (!urlVars.isEmpty ? "?" : "") + join("&", urlVars)
+    }
+    
+    
+    /* Helper: Given raw JSON, return a usable Foundation object */
+    class func parseJSONWithCompletionHandler(data: NSData, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
+        
+        var parsingError: NSError? = nil
+        
+        let parsedResult: AnyObject? = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError)
+        
+        if let error = parsingError {
+            completionHandler(result: nil, error: error)
+        } else {
+            completionHandler(result: parsedResult, error: nil)
+        }
     }
     
     

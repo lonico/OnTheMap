@@ -49,8 +49,7 @@ class TabBarViewController: UITabBarController {
     // MARK - support functions
     
     func parseGetStudentLocations() -> Void {
-        UdacityCLient.shared_instance().parseGetStudentLocations { (success, errorMsg) -> Void in
-    
+        ParseClient.parseGetStudentLocations { (success, errorMsg) -> Void in
         }
     }
 }

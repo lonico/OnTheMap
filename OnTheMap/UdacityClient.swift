@@ -14,11 +14,6 @@ class UdacityCLient: NSObject {
     var udacity_session_id: String!
     var udacity_user_id: String!
     
-    override init () {
-        //session = NSURLSession.sharedSession()
-        super.init()
-    }
-    
     func loginWithEmailID(emailId: String, password: String, completion_handler: (success: Bool, errorMsg: String?) -> Void) {
         
         let jsonBody = [
@@ -50,7 +45,7 @@ class UdacityCLient: NSObject {
                 println(error)
                 errorMsg = error
             } else {
-                self.parseJSONWithCompletionHandler(data) { result, error in
+                HttpClient.parseJSONWithCompletionHandler(data) { result, error in
                     if let error = error {
                         errorMsg = error.localizedDescription
                     } else {
@@ -101,7 +96,7 @@ class UdacityCLient: NSObject {
                 errorMsg = error
             } else {
                 // println(NSString(data: data, encoding: NSUTF8StringEncoding))
-                self.parseJSONWithCompletionHandler(data) { result, error in
+                HttpClient.parseJSONWithCompletionHandler(data) { result, error in
                     if let error = error {
                         errorMsg = error.localizedDescription
                     } else {
@@ -113,54 +108,6 @@ class UdacityCLient: NSObject {
         }
     }
     
-    func parseGetStudentLocations(completion_handler: (success: Bool, errorMsg: String?) -> Void) {
-        
-        parseSendGetStudentLocations() { results, errorMsg in
-            if errorMsg != nil { // Handle error...
-                return
-            }
-            println(results)
-        }
-    }
-    
-    func parseSendGetStudentLocations(completion_handler: (results: [String:AnyObject]?, errorMsg: String?) -> Void) {
-        
-        let request = NSMutableURLRequest(URL: NSURL(string: "https://api.parse.com/1/classes/StudentLocation?limit=4&order=-updatedAt")!)
-        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
-        let session = HttpClient.shared_instance().session
-        let task = session.dataTaskWithRequest(request) { data, response, error in
-            if error != nil { // Handle error...
-                return
-            }
-            println(NSString(data: data, encoding: NSUTF8StringEncoding))
-            let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5)) /* subset response data! */
-            self.parseJSONWithCompletionHandler(newData) { result, error in
-                var errorMsg: String! = nil
-                var results: [String:AnyObject]! = nil
-                if let error = error {
-                    errorMsg = error.localizedDescription
-                } else {
-                    if let got_results = result.valueForKey("results") as? [String: String] {
-                        results = got_results
-                    } else if let status = result.valueForKey("status") as? Int {
-                        errorMsg = ""
-                        if let errorStr = result.valueForKey("error") as? String {
-                            errorMsg = errorStr
-                        }
-                        errorMsg = errorMsg + " (\(status))"
-                    } else {
-                        errorMsg = "Unexpected error, no 'session' field"
-                    }
-                }
-                completion_handler(results: results, errorMsg: errorMsg)
-            }
-
-        }
-        task.resume()
-    }
-    
-
     func getDataForUser(userid: String, completion_handler: (success: Bool, errorMsg: String?) -> Void) {
     
         let url = NSURL(string: "https://www.udacity.com/api/users/\(userid)")!
@@ -186,21 +133,6 @@ class UdacityCLient: NSObject {
         return Singleton.sharedInstance
     }
     
-    /* Helper: Given raw JSON, return a usable Foundation object */
-    func parseJSONWithCompletionHandler(data: NSData, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
-        
-        var parsingError: NSError? = nil
-        
-        let parsedResult: AnyObject? = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError)
-        
-        if let error = parsingError {
-            completionHandler(result: nil, error: error)
-        } else {
-            completionHandler(result: parsedResult, error: nil)
-        }
-    }
-    
-
     func getAndSetSessionFromResult(result: AnyObject) -> String! {
         
         var errorMsg: String! = nil
@@ -216,7 +148,6 @@ class UdacityCLient: NSObject {
         return errorMsg
     }
     
-
     func getStatusAndErrorMessageFromResult(result: AnyObject, missing_key: String!) -> String {
     
         var errorMsg: String
