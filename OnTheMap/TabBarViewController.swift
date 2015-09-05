@@ -16,8 +16,10 @@ class TabBarViewController: UITabBarController {
     override func viewWillAppear(animated: Bool) {
         let rightButtons = [refreshButton, pinButton]
         self.navigationItem.setRightBarButtonItems(rightButtons, animated: true)
+        parseGetStudentLocations()
         super.viewWillAppear(animated)
     }
+    
     
     @IBAction func pinButtonTouched(sender: UIBarButtonItem) {
         println("pinned!")      // TODO
@@ -25,6 +27,7 @@ class TabBarViewController: UITabBarController {
     
     @IBAction func refreshButtonTouch(sender: UIBarButtonItem) {
         println("refreshed")    // TODO
+        parseGetStudentLocations()
     }
     
     @IBAction func logoutButtonTouch(sender: UIBarButtonItem) {
@@ -40,6 +43,14 @@ class TabBarViewController: UITabBarController {
                 let controller = self.storyboard!.instantiateViewControllerWithIdentifier("loginViewController") as! UIViewController
                 self.presentViewController(controller, animated: true, completion: nil)
             }
+        }
+    }
+    
+    // MARK - support functions
+    
+    func parseGetStudentLocations() -> Void {
+        UdacityCLient.shared_instance().parseGetStudentLocations { (success, errorMsg) -> Void in
+    
         }
     }
 }

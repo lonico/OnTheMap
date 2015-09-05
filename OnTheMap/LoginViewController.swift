@@ -105,7 +105,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         let alertController = UIAlertController(title: title, message: msg, preferredStyle: .Alert)
         
         //Create and add the Cancel action
-        let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel) { action -> Void in
+        let cancelAction: UIAlertAction = UIAlertAction(title: "Dismiss", style: .Cancel) { action -> Void in
             //Just dismiss the alert
         }
         alertController.addAction(cancelAction)

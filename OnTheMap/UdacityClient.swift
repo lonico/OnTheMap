@@ -11,85 +11,68 @@ import FBSDKLoginKit
 
 class UdacityCLient: NSObject {
     
-    var session: NSURLSession
     var udacity_session_id: String!
     var udacity_user_id: String!
     
     override init () {
-        session = NSURLSession.sharedSession()
+        //session = NSURLSession.sharedSession()
         super.init()
     }
     
     func loginWithEmailID(emailId: String, password: String, completion_handler: (success: Bool, errorMsg: String?) -> Void) {
         
-        let hTTPBody = "{\"udacity\": {\"username\": \"\(emailId)\", \"password\": \"\(password)\"}}"
-        login(hTTPBody, completion_handler: completion_handler)
+        let jsonBody = [
+            UdacityCLient.JsonRequestKeys.udacity:
+                [ UdacityCLient.JsonRequestKeys.udacity_userid: emailId,
+                  UdacityCLient.JsonRequestKeys.udacity_password : password ]
+        ]
+        login(jsonBody, completion_handler: completion_handler)
     }
     
     func loginWithFacebook(completion_handler: (success: Bool, errorMsg: String?) -> Void) {
         
         let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
-        let hTTPBody = "{\"facebook_mobile\": {\"access_token\":\"\(accessToken)\"}}"
-        login(hTTPBody, completion_handler: completion_handler)
+
+        let jsonBody = [
+            UdacityCLient.JsonRequestKeys.facebook_mobile:
+                [ UdacityCLient.JsonRequestKeys.fbm_accesstoken: accessToken ]
+        ]
+        login(jsonBody, completion_handler: completion_handler)
     }
     
-    func login(httpBody: String, completion_handler: (success: Bool, errorMsg: String?) -> Void) {
+    func login(jsonBody: [String: AnyObject], completion_handler: (success: Bool, errorMsg: String?) -> Void) {
         
-        let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
-        request.HTTPMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.HTTPBody = httpBody.dataUsingEncoding(NSUTF8StringEncoding)
+        let url = UdacityCLient.Constants.baseURL + UdacityCLient.Methods.session
         
-        let task = session.dataTaskWithRequest(request) { data, response, error in
-            var success = false
+        HttpClient.shared_instance().httpPost(url, parameters: nil, jsonBody: jsonBody) { data, error in
             var errorMsg: String! = nil
-            if error != nil {
-                errorMsg = error.localizedDescription
+            if let error = error {
+                println(error)
+                errorMsg = error
             } else {
-                let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5)) /* subset response data! */
-                // println(NSString(data: newData, encoding: NSUTF8StringEncoding))
-                self.parseJSONWithCompletionHandler(newData) { result, error in
+                self.parseJSONWithCompletionHandler(data) { result, error in
                     if let error = error {
                         errorMsg = error.localizedDescription
                     } else {
-                        if let session_dict = result.valueForKey("session") as? [String: String] {
-                            if let session_id = session_dict["id"] {
-                                self.udacity_session_id = session_id
-                                success = true
-                            } else {
-                                errorMsg = "Unexpected error, no 'id' field"
-                            }
-                        } else if let status = result.valueForKey("status") as? Int {
-                            errorMsg = ""
-                            if let errorStr = result.valueForKey("error") as? String {
-                                errorMsg = errorStr
-                            }
-                            errorMsg = errorMsg + " (\(status))"
-                        } else {
-                            errorMsg = "Unexpected error, no 'session' field"
-                        }
-                        if (success) {
-                            if let account_dict = result.valueForKey("account") as? [String: String] {
-                                if let user_id = account_dict["key"] {
+                        errorMsg = self.getAndSetSessionFromResult(result)
+                        if (errorMsg == nil) {
+                            if let account_dict = result.valueForKey(UdacityCLient.JsonDataKeys.account) as? [String: AnyObject] {
+                                if let user_id = account_dict[UdacityCLient.JsonDataKeys.key] as? String {
                                     self.udacity_user_id = user_id
-                                    success = true
                                 } else {
-                                    errorMsg = "Unexpected error, no 'key' field"
+                                    errorMsg = "Unexpected error, no '\(UdacityCLient.JsonDataKeys.key)' key"
                                 }
                             } else {
-                                errorMsg = "Unexpected error, no 'account' field"
+                                errorMsg = "Unexpected error, no '\(UdacityCLient.JsonDataKeys.account)' key"
                             }
-
                         }
                     }
-                    completion_handler(success: success, errorMsg: errorMsg)
                 }
             }
+            completion_handler(success: errorMsg == nil, errorMsg: errorMsg)
         }
-        task.resume()
     }
-    
+            
     func logout(completion_handler: (success: Bool, errorMsg: String?) -> Void) {
         
         logoutFromUdacity() { success, errorMsg in
@@ -110,36 +93,56 @@ class UdacityCLient: NSObject {
     
     func logoutFromUdacity(completion_handler: (success: Bool, errorMsg: String?) -> Void) {
     
-        let request = NSMutableURLRequest(URL: NSURL(string: "https://www.udacity.com/api/session")!)
-        request.HTTPMethod = "DELETE"
-        var xsrfCookie: NSHTTPCookie? = nil
-        let sharedCookieStorage = NSHTTPCookieStorage.sharedHTTPCookieStorage()
-        for cookie in sharedCookieStorage.cookies as! [NSHTTPCookie] {
-            if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
-        }
-        if let xsrfCookie = xsrfCookie {
-            request.setValue(xsrfCookie.value!, forHTTPHeaderField: "X-XSRF-TOKEN")
-        }
-
-        let task = session.dataTaskWithRequest(request) { data, response, error in
-            var success = false
-            var errorMsg = ""
+        let url = UdacityCLient.Constants.baseURL + UdacityCLient.Methods.session
+            
+        HttpClient.shared_instance().httpDelete(url, parameters: nil) { data, error in
+            var errorMsg: String! = nil
             if error != nil { // Handle error…
+                errorMsg = error
+            } else {
+                // println(NSString(data: data, encoding: NSUTF8StringEncoding))
+                self.parseJSONWithCompletionHandler(data) { result, error in
+                    if let error = error {
+                        errorMsg = error.localizedDescription
+                    } else {
+                        errorMsg = self.getAndSetSessionFromResult(result)
+                    }
+                }
+                completion_handler(success: errorMsg == nil, errorMsg: errorMsg)
+            }
+        }
+    }
+    
+    func parseGetStudentLocations(completion_handler: (success: Bool, errorMsg: String?) -> Void) {
+        
+        parseSendGetStudentLocations() { results, errorMsg in
+            if errorMsg != nil { // Handle error...
                 return
             }
+            println(results)
+        }
+    }
+    
+    func parseSendGetStudentLocations(completion_handler: (results: [String:AnyObject]?, errorMsg: String?) -> Void) {
+        
+        let request = NSMutableURLRequest(URL: NSURL(string: "https://api.parse.com/1/classes/StudentLocation?limit=4&order=-updatedAt")!)
+        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
+        let session = HttpClient.shared_instance().session
+        let task = session.dataTaskWithRequest(request) { data, response, error in
+            if error != nil { // Handle error...
+                return
+            }
+            println(NSString(data: data, encoding: NSUTF8StringEncoding))
             let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5)) /* subset response data! */
-            // println(NSString(data: newData, encoding: NSUTF8StringEncoding))
             self.parseJSONWithCompletionHandler(newData) { result, error in
+                var errorMsg: String! = nil
+                var results: [String:AnyObject]! = nil
                 if let error = error {
                     errorMsg = error.localizedDescription
                 } else {
-                    if let session_dict = result.valueForKey("session") as? [String: String] {
-                        if let session_id = session_dict["id"] {
-                            self.udacity_session_id = session_id
-                            success = true
-                        } else {
-                            errorMsg = "Unexpected error, no 'id' field"
-                        }
+                    if let got_results = result.valueForKey("results") as? [String: String] {
+                        results = got_results
                     } else if let status = result.valueForKey("status") as? Int {
                         errorMsg = ""
                         if let errorStr = result.valueForKey("error") as? String {
@@ -150,18 +153,19 @@ class UdacityCLient: NSObject {
                         errorMsg = "Unexpected error, no 'session' field"
                     }
                 }
-                completion_handler(success: success, errorMsg: errorMsg)
+                completion_handler(results: results, errorMsg: errorMsg)
             }
 
         }
-    task.resume()
+        task.resume()
     }
+    
 
     func getDataForUser(userid: String, completion_handler: (success: Bool, errorMsg: String?) -> Void) {
     
         let url = NSURL(string: "https://www.udacity.com/api/users/\(userid)")!
         let request = NSMutableURLRequest(URL: url)
-        let session = NSURLSession.sharedSession()
+        let session = HttpClient.shared_instance().session
         let task = session.dataTaskWithRequest(request) { data, response, error in
             if error != nil { // Handle error...
                 return
@@ -195,5 +199,72 @@ class UdacityCLient: NSObject {
             completionHandler(result: parsedResult, error: nil)
         }
     }
+    
 
+    func getAndSetSessionFromResult(result: AnyObject) -> String! {
+        
+        var errorMsg: String! = nil
+        if let session_dict = result.valueForKey(UdacityCLient.JsonDataKeys.session) as? [String: String] {
+            if let session_id = session_dict[UdacityCLient.JsonDataKeys.id] {
+                self.udacity_session_id = session_id
+            } else {
+                errorMsg = "Unexpected error, no '\(UdacityCLient.JsonDataKeys.id)' key"
+            }
+        } else {
+            errorMsg = getStatusAndErrorMessageFromResult(result, missing_key: UdacityCLient.JsonDataKeys.session)
+        }
+        return errorMsg
+    }
+    
+
+    func getStatusAndErrorMessageFromResult(result: AnyObject, missing_key: String!) -> String {
+    
+        var errorMsg: String
+        if let status = result.valueForKey(UdacityCLient.JsonDataKeys.status) as? Int {
+                errorMsg = ""
+                if let errorStr = result.valueForKey(UdacityCLient.JsonDataKeys.error) as? String {
+                    errorMsg = errorStr
+                }
+                errorMsg = errorMsg + " (\(status))"
+        } else {
+            errorMsg = "Unexpected error, "
+            if (missing_key != nil) {
+                errorMsg += "no '\(missing_key)' and "
+            }
+            errorMsg += "no '\(UdacityCLient.JsonDataKeys.status)' key"
+        }
+        return errorMsg
+    }
+    
+    struct Constants {
+        
+        static let baseURL = "https://www.udacity.com/api/"
+    }
+    
+    struct Methods {
+        
+        static let session = "session"
+        static let user = "user"
+    }
+    
+    struct JsonRequestKeys {
+        
+        static let udacity = "udacity"
+        static let udacity_userid = "username"
+        static let udacity_password = "password"
+        static let facebook_mobile = "facebook_mobile"
+        static let fbm_accesstoken = "access_token"
+    }
+    
+    struct JsonDataKeys {
+        
+        static let session = "session"
+        static let id = "id"
+        static let account = "account"
+        static let key = "key"
+        static let error = "error"
+        static let status = "status"
+    }
+    
+    
 }
