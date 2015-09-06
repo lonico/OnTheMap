@@ -167,6 +167,8 @@ class UdacityCLient: NSObject {
         return errorMsg
     }
     
+    // MARK - Constants for HTTP requests
+    
     struct Constants {
         
         static let baseURL = "https://www.udacity.com/api/"

@@ -20,6 +20,7 @@ class HttpClient: NSObject {
     func httpGet(urlString: String, parameters: [String:AnyObject]!, httpHeaderFields: [String: String]!, completion_handler: (data: NSData!, error: String!) -> Void) {
         
         let urlWithParams = urlString + HttpClient.escapedParameters(parameters)
+        let offset = 0
         
         let request = NSMutableURLRequest(URL: NSURL(string: urlWithParams)!)
         request.HTTPMethod = "GET"
@@ -39,7 +40,7 @@ class HttpClient: NSObject {
             if error != nil {
                 errorMsg = error.localizedDescription
             } else {
-                dataWithOffset = data.subdataWithRange(NSMakeRange(5, data.length - 5)) /* subset response data! */
+                dataWithOffset = data.subdataWithRange(NSMakeRange(offset, data.length - offset)) /* subset response data! */
                 //println(NSString(data: newData, encoding: NSUTF8StringEncoding))
             }
             completion_handler(data: dataWithOffset, error: errorMsg)

@@ -8,19 +8,33 @@
 
 import Foundation
 
+
+
 class ParseClient {
 
-    class func parseGetStudentLocations(completion_handler: (success: Bool, errorMsg: String?) -> Void) {
+    var studentLocations = [StudentLocation]()
+    
+    func parseGetStudentLocations(completion_handler: (success: Bool, errorMsg: String?) -> Void) {
         
-        parseSendGetStudentLocations() { results, errorMsg in
+        ParseClient.parseSendGetStudentLocations() { results, errorMsg in
             if errorMsg != nil { // Handle error...
-                return
+                println("ERROR: \(errorMsg)")
+            } else {
+                println(results)
+                var new_studentLocations = [StudentLocation]()
+                
+                for record in results! {
+                    println("----\n\(record)\n")
+                    let student = record as StudentLocation
+                    new_studentLocations.append(student)
+                }
+                self.studentLocations = new_studentLocations
             }
-            println(results)
+            completion_handler(success: errorMsg == nil, errorMsg: errorMsg)
         }
     }
 
-    class func parseSendGetStudentLocations(completion_handler: (results: [String:AnyObject]?, errorMsg: String?) -> Void) {
+    static func parseSendGetStudentLocations(completion_handler: (results: [StudentLocation]?, errorMsg: String?) -> Void) {
         
         let url = ParseClient.Constants.baseURL + ParseClient.Methods.StudentLocation
         
@@ -31,7 +45,7 @@ class ParseClient {
         
         HttpClient.shared_instance().httpGet(url, parameters: parms, httpHeaderFields: ParseClient.HTTPHeaderFields.keyvalues) { data, error in
             var errorMsg: String! = nil
-            var results: [String:AnyObject]! = nil
+            var results: [StudentLocation]! = nil
             
             println(NSString(data: data, encoding: NSUTF8StringEncoding))
 
@@ -43,7 +57,7 @@ class ParseClient {
                     if let error = error {
                         errorMsg = error.localizedDescription
                     } else {
-                        if let got_results = result.valueForKey("results") as? [String: String] {
+                        if let got_results = result.valueForKey("results") as? [[String: AnyObject]] {
                             results = got_results
                         } else if let status = result.valueForKey("status") as? Int {
                             errorMsg = ""
@@ -52,7 +66,7 @@ class ParseClient {
                             }
                             errorMsg = errorMsg + " (\(status))"
                         } else {
-                            errorMsg = "Unexpected error, no 'session' field"
+                            errorMsg = "Unexpected error, no 'results' field"
                         }
                     }
                 }
@@ -61,6 +75,16 @@ class ParseClient {
         }
         
     }
+    
+    static func shared_instance() -> ParseClient {
+        
+        struct Singleton {
+            static var shared_instance = ParseClient()
+        }
+        return Singleton.shared_instance
+    }
+    
+    // MARK - Constants for HTTP requests
     
     struct Constants {
         
@@ -77,17 +101,26 @@ class ParseClient {
         static let limit = "limit"
         static let order = "order"
     }
+    
+    struct JsonStudentKeys {
+        
+        static let firstname = "firstName"
+        static let lastname = "lastName"
+        static let mediaURL = "mediaURL"
+        static let longitude = "longitude"
+        static let latitude = "latitude"
+    }
 
     struct HTTPHeaderFields {
         
         //request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
         //request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
+        
         static let keyvalues = [
             "X-Parse-Application-Id": "QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr",
             "X-Parse-REST-API-Key": "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY"
             ]
     }
-    
     
 }
 

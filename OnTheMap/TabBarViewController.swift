@@ -13,11 +13,16 @@ class TabBarViewController: UITabBarController {
     @IBOutlet var pinButton: UIBarButtonItem!
     @IBOutlet var refreshButton: UIBarButtonItem!
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewDidAppear(animated: Bool) {
         let rightButtons = [refreshButton, pinButton]
         self.navigationItem.setRightBarButtonItems(rightButtons, animated: true)
-        parseGetStudentLocations()
-        super.viewWillAppear(animated)
+        parseGetStudentLocations() { success, errorMsg in
+//            if success {
+//                let mapViewController = self.childViewControllers[0] as! UIViewController
+//                self.presentViewController(mapViewController, animated: true, completion: nil)
+//            }
+        }
+        super.viewDidAppear(animated)
     }
     
     
@@ -27,7 +32,12 @@ class TabBarViewController: UITabBarController {
     
     @IBAction func refreshButtonTouch(sender: UIBarButtonItem) {
         println("refreshed")    // TODO
-        parseGetStudentLocations()
+        parseGetStudentLocations() { success, errorMsg in
+//            if success {
+//                let mapViewController = self.childViewControllers[0] as! UIViewController
+//                self.presentViewController(mapViewController, animated: true, completion: nil)
+//            }
+        }
     }
     
     @IBAction func logoutButtonTouch(sender: UIBarButtonItem) {
@@ -48,8 +58,9 @@ class TabBarViewController: UITabBarController {
     
     // MARK - support functions
     
-    func parseGetStudentLocations() -> Void {
-        ParseClient.parseGetStudentLocations { (success, errorMsg) -> Void in
+    func parseGetStudentLocations(completion_handler: (success: Bool, errorMsg: String?) -> Void) {
+        ParseClient.shared_instance().parseGetStudentLocations { success, errorMsg in
+            completion_handler(success: success, errorMsg: errorMsg)
         }
     }
 }

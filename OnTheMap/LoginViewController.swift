@@ -21,6 +21,8 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         let accessToken = FBSDKAccessToken.currentAccessToken()
         if let accessToken = accessToken {
             println(">>> already logged in")
+            let alertTitle = "Facebook login failed"
+            loginWithFB(alertTitle)
         }
     }
     
@@ -46,12 +48,15 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         
         UdacityCLient.shared_instance().logout() { success, errorMsg in
             var msg: String? = ""
+            var alertTitle = ""
             if success {
                 println(">>> Logged out")
+                alertTitle = "Facebook logout complete"
+                msg = ""
             } else {
+                alertTitle = "Facebook logout error"
                 msg = errorMsg
             }
-            let alertTitle = "Facebook login failed"
             self.dispatchAlert(msg, title: alertTitle)
         }
     }
@@ -134,7 +139,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
    
     func completeLogin() {
         println(">>> Login Successful")
-        dispatch_sync(dispatch_get_main_queue()) {
+        dispatch_async(dispatch_get_main_queue()) {
             let controller = self.storyboard!.instantiateViewControllerWithIdentifier("navViewController") as! UIViewController
             self.presentViewController(controller, animated: true, completion: nil)
         }
