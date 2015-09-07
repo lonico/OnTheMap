@@ -25,7 +25,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Table view data source
+    // MARK: - Table view data sources
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete method implementation.
@@ -37,11 +37,40 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         var cell = tableView.dequeueReusableCellWithIdentifier("studentCell", forIndexPath: indexPath) as! UITableViewCell
 
         // Configure the cell...
-        let student = ParseClient.shared_instance().studentLocations[indexPath.row] as StudentLocation
+        let student = ParseClient.shared_instance().studentLocations[indexPath.row]
         println(student)
-        cell.textLabel?.text = getFullNameFromStudent(student)
-        cell.detailTextLabel?.text = getURLFromStudent(student)
+        cell.textLabel?.text = student.getFullNameFromStudent()
+        cell.detailTextLabel?.text = student.getURLFromStudent()
         return cell
+    }
+    
+    // MARK - Table view delegates
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        let app = UIApplication.sharedApplication()
+        let cell = tableView.cellForRowAtIndexPath(indexPath)
+        if let url = cell?.detailTextLabel?.text {
+            app.openURL(NSURL(string: url)!)
+        } else {
+            showAlert("No URL", title: nil)
+        }
+    }
+    
+    func showAlert(msg: String?, var title: String?) {
+        
+        if title == nil {
+            title = "Alert"
+        }
+        
+        let alertController = UIAlertController(title: title, message: msg, preferredStyle: .Alert)
+        
+        //Create and add the Cancel action
+        let cancelAction: UIAlertAction = UIAlertAction(title: "Dismiss", style: .Cancel) { action -> Void in
+            //Just dismiss the alert
+        }
+        alertController.addAction(cancelAction)
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
 
     /*
