@@ -28,6 +28,9 @@ class TabBarViewController: UITabBarController {
     
     @IBAction func pinButtonTouched(sender: UIBarButtonItem) {
         println("pinned!")      // TODO
+        let addSLController = self.storyboard!.instantiateViewControllerWithIdentifier("addStudentLocation") as! UIViewController
+        self.presentViewController(addSLController, animated: true, completion: nil)
+        
     }
     
     @IBAction func refreshButtonTouch(sender: UIBarButtonItem) {
