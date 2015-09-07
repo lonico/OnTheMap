@@ -9,7 +9,7 @@
 import UIKit
 import FBSDKLoginKit
 
-class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
+class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -23,6 +23,8 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
             println(">>> already logged in")
             let alertTitle = "Facebook login failed"
             loginWithFB(alertTitle)
+        } else {
+            emailTextField.becomeFirstResponder()
         }
     }
     
@@ -65,7 +67,10 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
     // FB login button does not require an action
     
     @IBAction func loginButtonTouchUp(sender: UIButton) {
-        
+    }
+    
+    func actionLoginWithEmailPassword() {
+    
         let email = emailTextField.text
         let password = passwordTextField.text
         let alertTitle = "Login error"
@@ -88,6 +93,20 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         if let udacityLink = NSURL(string : "https://www.udacity.com/account/auth#!/signup") {
             UIApplication.sharedApplication().openURL(udacityLink)
         }
+    }
+    
+    // MARK - UITextFieldDelegates
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        
+        if textField == emailTextField {
+            textField.resignFirstResponder()
+            passwordTextField.becomeFirstResponder()
+        } else if textField == passwordTextField {
+            textField.resignFirstResponder()
+            actionLoginWithEmailPassword()
+        }
+        return true
     }
     
     // MARK - UI update functions

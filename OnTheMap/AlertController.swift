@@ -10,30 +10,34 @@ import UIKit
 
 struct AlertController {
     
-    static func showAlert(vc: UIViewController, msg: String?, var title: String?) {
-        
-        if title == nil {
-            title = "Alert"
-        }
-        
-        let alertController = UIAlertController(title: title, message: msg, preferredStyle: .Alert)
-        
-        //Create and add the Cancel action
-        let cancelAction: UIAlertAction = UIAlertAction(title: "Dismiss", style: .Cancel) { action -> Void in
-            //Just dismiss the alert
-        }
-        alertController.addAction(cancelAction)
-        vc.presentViewController(alertController, animated: true, completion: nil)
-    }
+    struct Alert {
+        let msg: String!
+        let title: String!
     
-    static func dispatchAlert(vc: UIViewController, msg: String?, title: String?) {
-        if let msg = msg {
-            dispatch_async(dispatch_get_main_queue()) {
-                self.showAlert(vc, msg: msg, title: title)
+        func showAlert(vc: UIViewController) {
+            
+            var valid_title = title
+            if valid_title == nil {
+                valid_title = "Alert"
             }
             
+            let alertController = UIAlertController(title: valid_title, message: msg, preferredStyle: .Alert)
+            
+            //Create and add the Cancel action
+            let cancelAction: UIAlertAction = UIAlertAction(title: "Dismiss", style: .Cancel) { action -> Void in
+                //Just dismiss the alert
+            }
+            alertController.addAction(cancelAction)
+            vc.presentViewController(alertController, animated: true, completion: nil)
+        }
+        
+        
+        func dispatchAlert(vc: UIViewController) {
+            if let msg = msg {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.showAlert(vc)
+                }
+            }
         }
     }
-
-
 }

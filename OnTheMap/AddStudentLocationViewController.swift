@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class AddStudentLocationViewController: UIViewController {
+class AddStudentLocationViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var locationInputTextField: UITextField!
     
@@ -17,6 +17,10 @@ class AddStudentLocationViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        locationInputTextField.becomeFirstResponder()
     }
 
     override func didReceiveMemoryWarning() {
@@ -32,40 +36,48 @@ class AddStudentLocationViewController: UIViewController {
     }
     
     @IBAction func FindButtonTouchUp(sender: UIButton) {
+        findAction()
+    }
+    
+    func findAction() {
         let location = locationInputTextField.text
         if location == "" {
-            AlertController.showAlert(self, msg: "please enter an address", title: "Empty location")
+            let alert = AlertController.Alert(msg: "please enter an address", title: "Empty location")
+            alert.showAlert(self)
         } else {
             getPlaceMarksAndSegue(location)
         }
     }
     
-    struct Alert {
-        let msg: String!
-        let title: String!
+    // Mark - UITextField delegate
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        findAction()
+        return true
     }
     
-    func getPlaceMark(address: String, completion_handler: (placemark: CLPlacemark!, alert: Alert!) -> Void) {
+    
+    func getPlaceMark(address: String, completion_handler: (placemark: CLPlacemark!, alert: AlertController.Alert!) -> Void) {
         
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(address) { placemark, error in
             var studentPlacemark: CLPlacemark! = nil
-            var alert: Alert! = nil
+            var alert: AlertController.Alert! = nil
             if let error = error {
-                alert = Alert(msg: error.localizedDescription, title: "Cannot localize address")
+                alert = AlertController.Alert(msg: error.localizedDescription, title: "Cannot localize address")
             } else if let placemark = placemark {
                 println(placemark)
                 println(placemark.count)
                 if placemark.count == 0 {
-                    alert = Alert(msg: "Unexpected error (empty array)", title: "Cannot localize address")
+                    alert = AlertController.Alert(msg: "Unexpected error (empty array)", title: "Cannot localize address")
                 } else {
                     if placemark.count > 1 {
-                        alert = Alert(msg: "Got \(placemark.count) results, using the first one", title: "Ambiguous address")
+                        alert = AlertController.Alert(msg: "Got \(placemark.count) results, using the first one", title: "Ambiguous address")
                     }
                     studentPlacemark = placemark[0] as! CLPlacemark
                 }
             } else {
-                alert = Alert(msg: "Unexpected error (nil)", title: "Cannot localize address")
+                alert = AlertController.Alert(msg: "Unexpected error (nil)", title: "Cannot localize address")
             }
             completion_handler(placemark: studentPlacemark, alert: alert)
         }
@@ -75,16 +87,16 @@ class AddStudentLocationViewController: UIViewController {
     func getPlaceMarksAndSegue(address: String) -> Void {
         getPlaceMark(address) { placemark, alert in
             if let alert = alert {
-                AlertController.dispatchAlert(self, msg: alert.msg, title: alert.title)
+                alert.dispatchAlert(self)
             }
             if let placemark = placemark {
                 //prepareForSegue(<#segue: UIStoryboardSegue#>, sender: <#AnyObject?#>)
+                let alert = AlertController.Alert(msg: "found a location", title: "Success - segue TBD")
+                alert.dispatchAlert(self)
             }
         }
     }
     
-    
-
     /*
     // MARK: - Navigation
 
