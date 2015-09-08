@@ -108,6 +108,12 @@ class UdacityCLient: NSObject {
         }
     }
     
+    func getUserInfo(completion_handler: (success: Bool, errorMsg: String?) -> Void) {
+        getDataForUser(udacity_user_id) { success, errorMsg in
+            
+        }
+    }
+    
     func getDataForUser(userid: String, completion_handler: (success: Bool, errorMsg: String?) -> Void) {
     
         let url = NSURL(string: "https://www.udacity.com/api/users/\(userid)")!
@@ -167,7 +173,7 @@ class UdacityCLient: NSObject {
         return errorMsg
     }
     
-    // MARK - Constants for HTTP requests
+    // MARK: Constants for HTTP requests
     
     struct Constants {
         

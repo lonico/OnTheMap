@@ -13,13 +13,39 @@ typealias StudentLocationDir = [String: AnyObject]
 
 struct StudentLocation {
     
+    let uniqueKey: String
     let firstName: String
     let lastName: String
+    let mapString: String
     let mediaURL: String
     let latitude: Double
     let longitude: Double
     
+    func getFullNameFromStudent() -> String? {
+        return join(" ", [self.firstName, self.lastName])
+    }
+    
+    func getURLFromStudent() -> String? {
+        return self.mediaURL
+    }
+    
+    func getCoordinateFromStudent() -> CLLocationCoordinate2D {
+        
+        // Notice that the float values are being used to create CLLocationDegree values.
+        // This is a version of the Double type.
+        var latitude = CLLocationDegrees(self.latitude)
+        var longitude = CLLocationDegrees(self.longitude)
+        // The lat and long are used to create a CLLocationCoordinates2D instance.
+        let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        return coordinate
+    }
+    
+}
+
+extension StudentLocation {
+    
     init(studentLocationDir dir: StudentLocationDir) {
+        
         var _firstName = ""
         var _lastName = ""
         var _mediaURL = ""
@@ -49,32 +75,16 @@ struct StudentLocation {
             default: break  // make Xcode happy, even though all cases are exhausted
             }
         }
-
+        
         firstName = _firstName
         lastName = _lastName
         mediaURL = _mediaURL
         latitude = _latitude
         longitude = _longitude
-    }
-    
-    func getFullNameFromStudent() -> String? {
-        return join(" ", [self.firstName, self.lastName])
-    }
-    
-    func getURLFromStudent() -> String? {
-        return self.mediaURL
-    }
-    
-    func getCoordinateFromStudent() -> CLLocationCoordinate2D {
         
-        // Notice that the float values are being used to create CLLocationDegree values.
-        // This is a version of the Double type.
-        var latitude = CLLocationDegrees(self.latitude)
-        var longitude = CLLocationDegrees(self.longitude)
-        // The lat and long are used to create a CLLocationCoordinates2D instance.
-        let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        return coordinate
+        // save a but of time, as these are not used
+        uniqueKey = "N/A"
+        mapString = "N/A"
     }
-    
 }
 

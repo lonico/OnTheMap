@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit
 
 class TabBarViewController: UITabBarController {
     
@@ -16,10 +17,15 @@ class TabBarViewController: UITabBarController {
     override func viewDidAppear(animated: Bool) {
         let rightButtons = [refreshButton, pinButton]
         self.navigationItem.setRightBarButtonItems(rightButtons, animated: true)
-        parseGetStudentLocations() { success, errorMsg in
+//        parseGetStudentLocations() { success, errorMsg in
 //            if success {
 //                let mapViewController = self.childViewControllers[0] as! UIViewController
 //                self.presentViewController(mapViewController, animated: true, completion: nil)
+//            }
+//            if success {
+                for vc in self.viewControllers as! [UIViewController] {
+                    println(vc.view.description)
+//                }
 //            }
         }
         super.viewDidAppear(animated)
@@ -29,8 +35,9 @@ class TabBarViewController: UITabBarController {
     @IBAction func pinButtonTouched(sender: UIBarButtonItem) {
         println("pinned!")      // TODO
         let addSLController = self.storyboard!.instantiateViewControllerWithIdentifier("addStudentLocation") as! UIViewController
-        self.presentViewController(addSLController, animated: true, completion: nil)
-        
+        dispatch_async(dispatch_get_main_queue()) {
+            self.presentViewController(addSLController, animated: true, completion: nil)
+        }
     }
     
     @IBAction func refreshButtonTouch(sender: UIBarButtonItem) {
@@ -40,6 +47,26 @@ class TabBarViewController: UITabBarController {
 //                let mapViewController = self.childViewControllers[0] as! UIViewController
 //                self.presentViewController(mapViewController, animated: true, completion: nil)
 //            }
+            for vc in self.viewControllers as! [UIViewController] {
+                println(vc.view.description)
+                if vc.conformsToProtocol(UITableViewDataSource) {
+                    for view in vc.view.subviews as! [UIView] {
+                        if let vcvv = view as? UITableView {
+                            vcvv.reloadData()
+                            println(">>>>>> RELOADED")
+                        }
+                    }
+                }
+                if vc.conformsToProtocol(MKMapViewDelegate) { // as a proxy, we should have our own protocol
+                    for view in vc.view.subviews as! [UIView] {
+                        if let vcvv = view as? MKMapView {
+                            //vcvv.reloadData()
+                            println(">>>>>> FOUND but NOT RELOADED")
+                        }
+                    }
+                }
+            }
+
         }
     }
     
@@ -59,7 +86,7 @@ class TabBarViewController: UITabBarController {
         }
     }
     
-    // MARK - support functions
+    // MARK: support functions
     
     func parseGetStudentLocations(completion_handler: (success: Bool, errorMsg: String?) -> Void) {
         ParseClient.shared_instance().parseGetStudentLocations { success, errorMsg in

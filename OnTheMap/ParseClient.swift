@@ -83,7 +83,7 @@ class ParseClient {
         return Singleton.shared_instance
     }
     
-    // MARK - Constants for HTTP requests
+    // MARK: Constants for HTTP requests
     
     struct Constants {
         

@@ -36,6 +36,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCellWithIdentifier("studentCell", forIndexPath: indexPath) as! UITableViewCell
 
+        println(">>> reading cell \(indexPath.row)")
         // Configure the cell...
         let student = ParseClient.shared_instance().studentLocations[indexPath.row]
         println(student)
@@ -44,7 +45,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         return cell
     }
     
-    // MARK - Table view delegates
+    // MARK: Table view delegates
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         

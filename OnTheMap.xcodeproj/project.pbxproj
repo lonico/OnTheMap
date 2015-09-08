@@ -12,6 +12,7 @@
 		C07E5B811B9CADD800B38046 /* StudentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07E5B801B9CADD800B38046 /* StudentLocation.swift */; };
 		C07E5B871B9E036700B38046 /* AddStudentLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07E5B861B9E036700B38046 /* AddStudentLocationViewController.swift */; };
 		C07E5B891B9E056D00B38046 /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07E5B881B9E056D00B38046 /* AlertController.swift */; };
+		C07E5B8B1B9E778000B38046 /* AddStudentMediaURLViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07E5B8A1B9E778000B38046 /* AddStudentMediaURLViewController.swift */; };
 		C082D9AE1B9017BF00D04C2F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C082D9AD1B9017BF00D04C2F /* AppDelegate.swift */; };
 		C082D9B31B9017BF00D04C2F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C082D9B11B9017BF00D04C2F /* Main.storyboard */; };
 		C082D9B51B9017BF00D04C2F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C082D9B41B9017BF00D04C2F /* Images.xcassets */; };
@@ -38,10 +39,11 @@
 
 /* Begin PBXFileReference section */
 		C07E5B781B9B4D7300B38046 /* HttpClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpClient.swift; sourceTree = "<group>"; };
-		C07E5B7C1B9BA01300B38046 /* ParseClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseClient.swift; sourceTree = "<group>"; };
+		C07E5B7C1B9BA01300B38046 /* ParseClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ParseClient.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C07E5B801B9CADD800B38046 /* StudentLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentLocation.swift; sourceTree = "<group>"; };
-		C07E5B861B9E036700B38046 /* AddStudentLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddStudentLocationViewController.swift; sourceTree = "<group>"; };
+		C07E5B861B9E036700B38046 /* AddStudentLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AddStudentLocationViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C07E5B881B9E056D00B38046 /* AlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
+		C07E5B8A1B9E778000B38046 /* AddStudentMediaURLViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddStudentMediaURLViewController.swift; sourceTree = "<group>"; };
 		C082D9A81B9017BF00D04C2F /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C082D9AC1B9017BF00D04C2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C082D9AD1B9017BF00D04C2F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -51,13 +53,13 @@
 		C082D9BD1B9017BF00D04C2F /* OnTheMapTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OnTheMapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C082D9C21B9017BF00D04C2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C082D9C31B9017BF00D04C2F /* OnTheMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnTheMapTests.swift; sourceTree = "<group>"; };
-		C082D9CD1B91520700D04C2F /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		C082D9CD1B91520700D04C2F /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = LoginViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C082D9D01B917B2C00D04C2F /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "../../../Downloads/FacebookSDKs-iOS-20150813/FBSDKLoginKit.framework"; sourceTree = "<group>"; };
-		C082D9D81B93A54500D04C2F /* UdacityClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UdacityClient.swift; sourceTree = "<group>"; };
+		C082D9D81B93A54500D04C2F /* UdacityClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = UdacityClient.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C082D9DA1B93A6B800D04C2F /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "../../../Downloads/FacebookSDKs-iOS-20150813/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
 		C082D9DC1B955F4A00D04C2F /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		C082D9E81B95745F00D04C2F /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
-		C0C819551B97F85100DFBA3D /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		C082D9E81B95745F00D04C2F /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TabBarViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		C0C819551B97F85100DFBA3D /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TableViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 				C082D9DC1B955F4A00D04C2F /* MapViewController.swift */,
 				C0C819551B97F85100DFBA3D /* TableViewController.swift */,
 				C07E5B861B9E036700B38046 /* AddStudentLocationViewController.swift */,
+				C07E5B8A1B9E778000B38046 /* AddStudentMediaURLViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -283,6 +286,7 @@
 				C07E5B7D1B9BA01300B38046 /* ParseClient.swift in Sources */,
 				C07E5B811B9CADD800B38046 /* StudentLocation.swift in Sources */,
 				C082D9D91B93A54500D04C2F /* UdacityClient.swift in Sources */,
+				C07E5B8B1B9E778000B38046 /* AddStudentMediaURLViewController.swift in Sources */,
 				C0C819561B97F85100DFBA3D /* TableViewController.swift in Sources */,
 				C07E5B791B9B4D7300B38046 /* HttpClient.swift in Sources */,
 				C07E5B871B9E036700B38046 /* AddStudentLocationViewController.swift in Sources */,

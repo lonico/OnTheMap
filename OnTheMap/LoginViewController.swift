@@ -28,7 +28,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
         }
     }
     
-    // MARK - FBSDKLoginButtonDelegate functions
+    // MARK: FBSDKLoginButtonDelegate functions
     
     func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
         
@@ -63,7 +63,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
         }
     }
     
-    // MARK - action buttons
+    // MARK: action buttons
     // FB login button does not require an action
     
     @IBAction func loginButtonTouchUp(sender: UIButton) {
@@ -95,13 +95,19 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
         }
     }
     
-    // MARK - UITextFieldDelegates
+    // MARK: UITextFieldDelegates
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         
+        let alertTitle = "Login error"
         if textField == emailTextField {
-            textField.resignFirstResponder()
-            passwordTextField.becomeFirstResponder()
+            if emailTextField.text == "" {
+                let msg = "Empty email field"
+                showAlert(msg, title: alertTitle)
+            } else {
+                textField.resignFirstResponder()
+                passwordTextField.becomeFirstResponder()
+            }
         } else if textField == passwordTextField {
             textField.resignFirstResponder()
             actionLoginWithEmailPassword()
@@ -109,31 +115,18 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
         return true
     }
     
-    // MARK - UI update functions
+    // MARK: UI update functions
     
     func dispatchAlert(msg: String?, title: String?) {
-        if let msg = msg {
-            dispatch_async(dispatch_get_main_queue()) {
-                self.showAlert(msg, title: title)
-            }
-            
-        }
+        
+        let alert = AlertController.Alert(msg: msg, title: title)
+        alert.dispatchAlert(self)
     }
     
     func showAlert(msg: String?, var title: String?) {
         
-        if title == nil {
-            title = "Alert"
-        }
-        
-        let alertController = UIAlertController(title: title, message: msg, preferredStyle: .Alert)
-        
-        //Create and add the Cancel action
-        let cancelAction: UIAlertAction = UIAlertAction(title: "Dismiss", style: .Cancel) { action -> Void in
-            //Just dismiss the alert
-        }
-        alertController.addAction(cancelAction)
-        self.presentViewController(alertController, animated: true, completion: nil)
+        let alert = AlertController.Alert(msg: msg, title: title)
+        alert.showAlert(self)
     }
     
     func loginWithFB(alertTitle: String) -> Void {

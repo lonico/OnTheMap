@@ -14,6 +14,7 @@ struct AlertController {
         let msg: String!
         let title: String!
     
+        
         func showAlert(vc: UIViewController) {
             
             var valid_title = title

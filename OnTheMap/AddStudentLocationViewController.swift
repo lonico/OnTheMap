@@ -28,7 +28,7 @@ class AddStudentLocationViewController: UIViewController, UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    // MARK - Action buttons
+    // MARK: Action buttons
     
     
     @IBAction func CancelButtonTouchUp(sender: UIButton) {
@@ -49,7 +49,7 @@ class AddStudentLocationViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    // Mark - UITextField delegate
+    // MARK: UITextField delegate
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         findAction()
@@ -90,9 +90,12 @@ class AddStudentLocationViewController: UIViewController, UITextFieldDelegate {
                 alert.dispatchAlert(self)
             }
             if let placemark = placemark {
-                //prepareForSegue(<#segue: UIStoryboardSegue#>, sender: <#AnyObject?#>)
-                let alert = AlertController.Alert(msg: "found a location", title: "Success - segue TBD")
-                alert.dispatchAlert(self)
+                let addSMController = self.storyboard!.instantiateViewControllerWithIdentifier("addStudentMediaURL") as! AddStudentMediaURLViewController
+                addSMController.placemark = placemark
+                addSMController.mapString = address
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.presentViewController(addSMController, animated: true, completion: nil)
+                }
             }
         }
     }
