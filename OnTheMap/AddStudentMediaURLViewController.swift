@@ -33,7 +33,7 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
     // MARK: UITextField Delegate
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        doSubmitAction()
+        taskForSubmitAction()
         return true
     }
     
@@ -45,23 +45,39 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func submitButtonTouchUp(sender: UIButton) {
-        doSubmitAction()
+        taskForSubmitAction()
     }
     
-    func doSubmitAction() {
+    func taskForSubmitAction() {
         if mediaURL.text == "" {
             let alert = AlertController.Alert(msg: "please enter URL", title: "Empty URL string")
             alert.showAlert(self)
         } else {
             let latitude = placemark.location.coordinate.latitude
             let longitude = placemark.location.coordinate.longitude
-            UdacityCLient.shared_instance().getUserInfo() {
-                success, errorMsg in
+            UdacityCLient.shared_instance().getUserInfo() { userInfo, errorMsg in
+                var alert: AlertController.Alert! = nil
+                if userInfo != nil {
+                    let studentLocation = StudentLocation(uniqueKey: userInfo.uniqueKey, firstName: userInfo.firstName, lastName: userInfo.lastName, mapString: self.mapString, mediaURL: self.mediaURL.text, latitude: latitude, longitude: longitude)
+                    
+                    ParseClient.postStudentLocation(studentLocation) { updatedAt, errorMsg in
+                        
+                        if updatedAt != nil {
+                            alert = AlertController.Alert(msg: "posted info for (userInfo.firstName) (userInfo.lastName)", title: "Success")
+                        } else {
+                            alert = AlertController.Alert(msg: errorMsg, title: "Error, cannot post user info")
+                        }
+                        alert.dispatchAlert(self)
+                    }
+                } else if errorMsg != nil {
+                    alert = AlertController.Alert(msg: errorMsg, title: "Error, cannot get user info")
+                } else {
+                    alert = AlertController.Alert(msg: "Internal error: userInfo and errorMsg are both nil", title: "Error, cannot get user info")
+                }
+                if alert != nil {
+                    alert.dispatchAlert(self)
+                }
             }
-            let studentLocation = StudentLocation(uniqueKey: "", firstName: "", lastName: "", mapString: mapString, mediaURL: mediaURL.text, latitude: latitude, longitude: longitude)
-            
-            let alert = AlertController.Alert(msg: "please come back later", title: "Success")
-            alert.showAlert(self)
         }
     }
     

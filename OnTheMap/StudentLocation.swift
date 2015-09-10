@@ -40,6 +40,26 @@ struct StudentLocation {
         return coordinate
     }
     
+    func getDictFromStudent() -> [String:AnyObject] {
+        var dict = [String:AnyObject]()
+        for key in ParseClient.JsonStudentAllKeys {
+            dict[key] = getValueForFieldName(key)
+        }
+        return dict
+    }
+    
+    func getValueForFieldName(key: String) -> AnyObject {
+        switch key {
+        case ParseClient.JsonStudentKeys.uniqueKey: return self.uniqueKey
+        case ParseClient.JsonStudentKeys.firstname: return self.firstName
+        case ParseClient.JsonStudentKeys.lastname: return self.lastName
+        case ParseClient.JsonStudentKeys.mediaURL: return self.mediaURL
+        case ParseClient.JsonStudentKeys.latitude: return self.latitude
+        case ParseClient.JsonStudentKeys.longitude: return self.longitude
+        case ParseClient.JsonStudentKeys.mapString: return self.mapString
+        default: return "N/A"
+        }
+    }
 }
 
 extension StudentLocation {
@@ -82,7 +102,7 @@ extension StudentLocation {
         latitude = _latitude
         longitude = _longitude
         
-        // save a but of time, as these are not used
+        // save a bit of time, as these are not used
         uniqueKey = "N/A"
         mapString = "N/A"
     }

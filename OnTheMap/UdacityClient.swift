@@ -39,11 +39,12 @@ class UdacityCLient: NSObject {
         
         let url = UdacityCLient.Constants.baseURL + UdacityCLient.Methods.session
         
-        HttpClient.shared_instance().httpPost(url, parameters: nil, jsonBody: jsonBody) { data, error in
+        HttpClient.shared_instance().httpPost(url, parameters: nil, jsonBody: jsonBody, httpHeaderFields: nil, offset: 5) { data, error in
             var errorMsg: String! = nil
             if let error = error {
                 println(error)
                 errorMsg = error
+                completion_handler(success: errorMsg == nil, errorMsg: errorMsg)
             } else {
                 HttpClient.parseJSONWithCompletionHandler(data) { result, error in
                     if let error = error {
@@ -62,9 +63,10 @@ class UdacityCLient: NSObject {
                             }
                         }
                     }
+                    completion_handler(success: errorMsg == nil, errorMsg: errorMsg)
                 }
             }
-            completion_handler(success: errorMsg == nil, errorMsg: errorMsg)
+            
         }
     }
             
@@ -108,23 +110,38 @@ class UdacityCLient: NSObject {
         }
     }
     
-    func getUserInfo(completion_handler: (success: Bool, errorMsg: String?) -> Void) {
-        getDataForUser(udacity_user_id) { success, errorMsg in
+    func getUserInfo(completion_handler: (userInfo: UserInfo!, errorMsg: String?) -> Void) {
+        getDataForUser(udacity_user_id) { data, errorMsg in
+            var errorMsg: String! = nil
+            var userInfo: UserInfo! = nil
+            HttpClient.parseJSONWithCompletionHandler(data) { result, error in
+                if let error = error {
+                    errorMsg = error.localizedDescription
+                } else {
+                    (userInfo, errorMsg) = self.getAndSetUserInfoFromResult(result)
+                }
+                completion_handler(userInfo: userInfo, errorMsg: errorMsg)
+            }
             
         }
     }
     
-    func getDataForUser(userid: String, completion_handler: (success: Bool, errorMsg: String?) -> Void) {
+    func getDataForUser(userid: String, completion_handler: (data: NSData!, error: String!) -> Void) {
     
         let url = NSURL(string: "https://www.udacity.com/api/users/\(userid)")!
         let request = NSMutableURLRequest(URL: url)
         let session = HttpClient.shared_instance().session
         let task = session.dataTaskWithRequest(request) { data, response, error in
+            var errorMsg: String! = nil
+            var returnData: NSData! = nil
             if error != nil { // Handle error...
-                return
+                errorMsg = error.localizedDescription
+            } else {
+                let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5)) /* subset response data! */
+                println(NSString(data: newData, encoding: NSUTF8StringEncoding)) // TODO
+                returnData = newData
             }
-            let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5)) /* subset response data! */
-            println(NSString(data: newData, encoding: NSUTF8StringEncoding))
+            completion_handler(data: returnData, error: errorMsg)
         }
         task.resume()
         
@@ -173,6 +190,43 @@ class UdacityCLient: NSObject {
         return errorMsg
     }
     
+    struct UserInfo {
+        let uniqueKey: String
+        let firstName: String
+        let lastName: String
+    }
+    
+    func getAndSetUserInfoFromResult(result: AnyObject) -> (userInfo: UserInfo!, errorMsg: String!) {
+        
+        var userInfo: UserInfo! = nil
+        var errorMsg: String! = nil
+        var firstName: String! = nil
+        var lastName: String! = nil
+        if let user_dict = result.valueForKey(UdacityCLient.JsonDataKeys.user) as? [String: AnyObject] {
+            if let value = user_dict[UdacityCLient.JsonDataKeys.firstName] as? String {
+                firstName = value
+            } else {
+                errorMsg = "Unexpected error, no '\(UdacityCLient.JsonDataKeys.firstName)' key"
+            }
+            if let value = user_dict[UdacityCLient.JsonDataKeys.lastName] as? String {
+                lastName = value
+            } else {
+                if errorMsg == nil {
+                    errorMsg = "Unexpected error, "
+                } else {
+                    errorMsg = errorMsg + " and "
+                }
+                errorMsg = errorMsg + "no '\(UdacityCLient.JsonDataKeys.lastName)' key"
+            }
+            if firstName != nil && lastName != nil {
+                userInfo = UserInfo(uniqueKey: udacity_user_id, firstName: firstName, lastName: lastName)
+            }
+        } else {
+            errorMsg = getStatusAndErrorMessageFromResult(result, missing_key: UdacityCLient.JsonDataKeys.user)
+        }
+        return (userInfo, errorMsg)
+    }
+    
     // MARK: Constants for HTTP requests
     
     struct Constants {
@@ -201,6 +255,9 @@ class UdacityCLient: NSObject {
         static let id = "id"
         static let account = "account"
         static let key = "key"
+        static let user = "user"
+        static let firstName = "first_name"
+        static let lastName = "last_name"
         static let error = "error"
         static let status = "status"
     }

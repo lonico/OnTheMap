@@ -89,7 +89,7 @@ class TabBarViewController: UITabBarController {
     // MARK: support functions
     
     func parseGetStudentLocations(completion_handler: (success: Bool, errorMsg: String?) -> Void) {
-        ParseClient.shared_instance().parseGetStudentLocations { success, errorMsg in
+        ParseClient.shared_instance().getStudentLocations { success, errorMsg in
             completion_handler(success: success, errorMsg: errorMsg)
         }
     }

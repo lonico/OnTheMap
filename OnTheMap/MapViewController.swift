@@ -17,7 +17,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        ParseClient.shared_instance().parseGetStudentLocations() { success, errorMsg in
+        ParseClient.shared_instance().getStudentLocations() { success, errorMsg in
             if success {
                 // get student information, including their location
                 let studentLocations = ParseClient.shared_instance().studentLocations

@@ -17,10 +17,9 @@ class HttpClient: NSObject {
         super.init()
     }
     
-    func httpGet(urlString: String, parameters: [String:AnyObject]!, httpHeaderFields: [String: String]!, completion_handler: (data: NSData!, error: String!) -> Void) {
+    func httpGet(urlString: String, parameters: [String:AnyObject]!, httpHeaderFields: [String: String]!, offset: Int, completion_handler: (data: NSData!, error: String!) -> Void) {
         
         let urlWithParams = urlString + HttpClient.escapedParameters(parameters)
-        let offset = 0
         
         let request = NSMutableURLRequest(URL: NSURL(string: urlWithParams)!)
         request.HTTPMethod = "GET"
@@ -31,8 +30,6 @@ class HttpClient: NSObject {
                 request.addValue(value, forHTTPHeaderField: key)
             }
         }
-        
-        
         
         let task = session.dataTaskWithRequest(request) { data, response, error in
             var dataWithOffset: NSData! = nil
@@ -50,7 +47,7 @@ class HttpClient: NSObject {
     }
     
     
-    func httpPost(urlString: String, parameters: [String:AnyObject]!, jsonBody: [String:AnyObject], completion_handler: (data: NSData!, error: String!) -> Void) {
+    func httpPost(urlString: String, parameters: [String:AnyObject]!, jsonBody: [String:AnyObject], httpHeaderFields: [String: String]!, offset: Int, completion_handler: (data: NSData!, error: String!) -> Void) {
         
         let urlWithParams = urlString + HttpClient.escapedParameters(parameters)
         
@@ -67,14 +64,20 @@ class HttpClient: NSObject {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.HTTPBody = httpBody
         
+        if (httpHeaderFields != nil) {
+            for (key, value) in httpHeaderFields {
+                request.addValue(value, forHTTPHeaderField: key)
+            }
+        }
+                
         let task = session.dataTaskWithRequest(request) { data, response, error in
             var dataWithOffset: NSData! = nil
             var errorMsg: String! = nil
             if error != nil {
                 errorMsg = error.localizedDescription
             } else {
-                dataWithOffset = data.subdataWithRange(NSMakeRange(5, data.length - 5)) /* subset response data! */
-                //println(NSString(data: newData, encoding: NSUTF8StringEncoding))
+                dataWithOffset = data.subdataWithRange(NSMakeRange(offset, data.length - offset)) /* subset response data! */
+                println(NSString(data: dataWithOffset, encoding: NSUTF8StringEncoding))
             }
             completion_handler(data: dataWithOffset, error: errorMsg)
         }

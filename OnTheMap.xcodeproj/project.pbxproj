@@ -13,6 +13,7 @@
 		C07E5B871B9E036700B38046 /* AddStudentLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07E5B861B9E036700B38046 /* AddStudentLocationViewController.swift */; };
 		C07E5B891B9E056D00B38046 /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07E5B881B9E056D00B38046 /* AlertController.swift */; };
 		C07E5B8B1B9E778000B38046 /* AddStudentMediaURLViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07E5B8A1B9E778000B38046 /* AddStudentMediaURLViewController.swift */; };
+		C07E5B8D1B9FDE8000B38046 /* GeoLocationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07E5B8C1B9FDE8000B38046 /* GeoLocationClient.swift */; };
 		C082D9AE1B9017BF00D04C2F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C082D9AD1B9017BF00D04C2F /* AppDelegate.swift */; };
 		C082D9B31B9017BF00D04C2F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C082D9B11B9017BF00D04C2F /* Main.storyboard */; };
 		C082D9B51B9017BF00D04C2F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C082D9B41B9017BF00D04C2F /* Images.xcassets */; };
@@ -44,6 +45,7 @@
 		C07E5B861B9E036700B38046 /* AddStudentLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AddStudentLocationViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C07E5B881B9E056D00B38046 /* AlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
 		C07E5B8A1B9E778000B38046 /* AddStudentMediaURLViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddStudentMediaURLViewController.swift; sourceTree = "<group>"; };
+		C07E5B8C1B9FDE8000B38046 /* GeoLocationClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeoLocationClient.swift; sourceTree = "<group>"; };
 		C082D9A81B9017BF00D04C2F /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C082D9AC1B9017BF00D04C2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C082D9AD1B9017BF00D04C2F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				C07E5B801B9CADD800B38046 /* StudentLocation.swift */,
+				C07E5B8C1B9FDE8000B38046 /* GeoLocationClient.swift */,
 				C082D9D81B93A54500D04C2F /* UdacityClient.swift */,
 				C07E5B7C1B9BA01300B38046 /* ParseClient.swift */,
 				C07E5B781B9B4D7300B38046 /* HttpClient.swift */,
@@ -291,6 +294,7 @@
 				C07E5B791B9B4D7300B38046 /* HttpClient.swift in Sources */,
 				C07E5B871B9E036700B38046 /* AddStudentLocationViewController.swift in Sources */,
 				C082D9CE1B91520700D04C2F /* LoginViewController.swift in Sources */,
+				C07E5B8D1B9FDE8000B38046 /* GeoLocationClient.swift in Sources */,
 				C082D9E91B95745F00D04C2F /* TabBarViewController.swift in Sources */,
 				C07E5B891B9E056D00B38046 /* AlertController.swift in Sources */,
 				C082D9DD1B955F4A00D04C2F /* MapViewController.swift in Sources */,
