@@ -14,13 +14,15 @@ class UdacityCLient: NSObject {
     var udacity_session_id: String!
     var udacity_user_id: String!
     
+    // MARK: Udacity login API, using 2 different json bodies, one for email/password, the other with FB auth token
+    
     func loginWithEmailID(emailId: String, password: String, completion_handler: (success: Bool, errorMsg: String?) -> Void) {
         
-        let jsonBody = [
-            UdacityCLient.JsonRequestKeys.udacity:
-                [ UdacityCLient.JsonRequestKeys.udacity_userid: emailId,
-                  UdacityCLient.JsonRequestKeys.udacity_password : password ]
-        ]
+        let jsonBody = [ UdacityCLient.JsonRequestKeys.udacity:
+                            [ UdacityCLient.JsonRequestKeys.udacity_userid: emailId,
+                              UdacityCLient.JsonRequestKeys.udacity_password : password
+                            ]
+                       ]
         login(jsonBody, completion_handler: completion_handler)
     }
     
@@ -28,12 +30,14 @@ class UdacityCLient: NSObject {
         
         let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
 
-        let jsonBody = [
-            UdacityCLient.JsonRequestKeys.facebook_mobile:
-                [ UdacityCLient.JsonRequestKeys.fbm_accesstoken: accessToken ]
-        ]
+        let jsonBody = [ UdacityCLient.JsonRequestKeys.facebook_mobile:
+                            [ UdacityCLient.JsonRequestKeys.fbm_accesstoken: accessToken
+                            ]
+                       ]
         login(jsonBody, completion_handler: completion_handler)
     }
+    
+    // MARK: common login call
     
     func login(jsonBody: [String: AnyObject], completion_handler: (success: Bool, errorMsg: String?) -> Void) {
         
@@ -69,7 +73,9 @@ class UdacityCLient: NSObject {
             
         }
     }
-            
+    
+    // MARK: logout APIs
+    
     func logout(completion_handler: (success: Bool, errorMsg: String?) -> Void) {
         
         logoutFromUdacity() { success, errorMsg in
@@ -110,6 +116,8 @@ class UdacityCLient: NSObject {
         }
     }
     
+    // MARK: user data API
+    
     func getUserInfo(completion_handler: (userInfo: UserInfo!, errorMsg: String?) -> Void) {
         getDataForUser(udacity_user_id) { data, errorMsg in
             var errorMsg: String! = nil
@@ -138,7 +146,7 @@ class UdacityCLient: NSObject {
                 errorMsg = error.localizedDescription
             } else {
                 let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5)) /* subset response data! */
-                println(NSString(data: newData, encoding: NSUTF8StringEncoding)) // TODO
+                // println(NSString(data: newData, encoding: NSUTF8StringEncoding)) // TODO
                 returnData = newData
             }
             completion_handler(data: returnData, error: errorMsg)
@@ -146,6 +154,8 @@ class UdacityCLient: NSObject {
         task.resume()
         
     }
+    
+    // MARK: support functions
     
     class func shared_instance() -> UdacityCLient {
 

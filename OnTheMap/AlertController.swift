@@ -11,9 +11,15 @@ import UIKit
 struct AlertController {
     
     struct Alert {
-        let msg: String!
-        let title: String!
-    
+        let msg: String?
+        let title: String?
+        let handler: ((UIAlertAction) -> Void)?
+        
+        init(msg: String?, title: String?, handler: ((UIAlertAction) -> Void)? = nil) {
+            self.msg = msg
+            self.title = title
+            self.handler = handler
+        }
         
         func showAlert(vc: UIViewController) {
             
@@ -21,23 +27,25 @@ struct AlertController {
             if valid_title == nil {
                 valid_title = "Alert"
             }
-            
             let alertController = UIAlertController(title: valid_title, message: msg, preferredStyle: .Alert)
-            
             //Create and add the Cancel action
-            let cancelAction: UIAlertAction = UIAlertAction(title: "Dismiss", style: .Cancel) { action -> Void in
-                //Just dismiss the alert
+            //let cancelAction = UIAlertControllerAction("Dismiss", preferredStyle: UIAlertControllerStyle.Alert, handler: handler)
+            var cancelAction: UIAlertAction
+            if handler == nil {
+                cancelAction = UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Cancel, handler: nil)
+            } else {
+                cancelAction = UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Cancel) { action in
+                    self.handler!(action)
+                }
             }
             alertController.addAction(cancelAction)
             vc.presentViewController(alertController, animated: true, completion: nil)
         }
         
-        
         func dispatchAlert(vc: UIViewController) {
-            if let msg = msg {
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.showAlert(vc)
-                }
+            
+            dispatch_async(dispatch_get_main_queue()) {
+            self.showAlert(vc)
             }
         }
     }

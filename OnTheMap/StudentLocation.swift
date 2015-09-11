@@ -67,11 +67,12 @@ extension StudentLocation {
     init(studentLocationDir dir: StudentLocationDir) {
         
         var _firstName = ""
-        var _lastName = ""
-        var _mediaURL = ""
-        var _latitude = 0.0
+        var _lastName  = ""
+        var _mediaURL  = ""
+        var _latitude  = 0.0
         var _longitude = 0.0
-        for key in ParseClient.JsonStudentAllKeysForStrings {
+        
+        for key in ParseClient.JsonStudentAllInputKeysForStrings {
             var value = ""
             if let stringValue = dir[key] as? String {
                 value = stringValue
@@ -84,7 +85,7 @@ extension StudentLocation {
             }
             
         }
-        for key in ParseClient.JsonStudentAllKeysForDoubles {
+        for key in ParseClient.JsonStudentAllInputKeysForDoubles {
             var value = 0.0
             if let doubleValue = dir[key] as? Double {
                 value = doubleValue
@@ -97,12 +98,12 @@ extension StudentLocation {
         }
         
         firstName = _firstName
-        lastName = _lastName
-        mediaURL = _mediaURL
-        latitude = _latitude
+        lastName  = _lastName
+        mediaURL  = _mediaURL
+        latitude  = _latitude
         longitude = _longitude
         
-        // save a bit of time, as these are not used
+        // save a bit of time, as these are not used as inputs
         uniqueKey = "N/A"
         mapString = "N/A"
     }

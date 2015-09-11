@@ -222,6 +222,9 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" image="list" id="diQ-su-gAx"/>
+                    <connections>
+                        <outlet property="tableView" destination="5Wi-yL-Zie" id="L4A-5V-3LC"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZLe-0A-4cE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -35,13 +35,13 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
         let alertTitle = "Facebook login failed"
         if let error = error {
             let errorMsg = error.domain + ": " + error.description
-            showAlert(errorMsg, title: title)
+            AlertController.Alert(msg: errorMsg, title: title).showAlert(self)
         } else {
             if let token = result!.token {
                 loginWithFB(alertTitle)
             } else {
                 let errorMsg = "no token"
-                showAlert(errorMsg, title: alertTitle)
+                AlertController.Alert(msg: errorMsg, title: title).showAlert(self)
             }
         }
     }
@@ -59,7 +59,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
                 alertTitle = "Facebook logout error"
                 msg = errorMsg
             }
-            self.dispatchAlert(msg, title: alertTitle)
+            AlertController.Alert(msg: msg, title: alertTitle).dispatchAlert(self)
         }
     }
     
@@ -67,10 +67,20 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
     // FB login button does not require an action
     
     @IBAction func loginButtonTouchUp(sender: UIButton) {
+        actionLoginWithEmailPassword()
     }
     
-    func actionLoginWithEmailPassword() {
     
+    @IBAction func signUpTouchUp(sender: UIButton) {
+        if let udacityLink = NSURL(string : "https://www.udacity.com/account/auth#!/signup") {
+            UIApplication.sharedApplication().openURL(udacityLink)
+        }
+    }
+    
+    // MARK: support function
+    
+    func actionLoginWithEmailPassword() {
+        
         let email = emailTextField.text
         let password = passwordTextField.text
         let alertTitle = "Login error"
@@ -80,18 +90,12 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
         
         if email == "" {
             let msg = "Empty email field"
-            showAlert(msg, title: alertTitle)
+            AlertController.Alert(msg: msg, title: title).showAlert(self)
         } else if password == "" {
             let msg = "Empty password field"
-            showAlert(msg, title: alertTitle)
+            AlertController.Alert(msg: msg, title: title).showAlert(self)
         } else {
             loginWithEmailID(email, password: password, alertTitle: alertTitle)
-        }
-    }
-    
-    @IBAction func signUpTouchUp(sender: UIButton) {
-        if let udacityLink = NSURL(string : "https://www.udacity.com/account/auth#!/signup") {
-            UIApplication.sharedApplication().openURL(udacityLink)
         }
     }
     
@@ -103,7 +107,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
         if textField == emailTextField {
             if emailTextField.text == "" {
                 let msg = "Empty email field"
-                showAlert(msg, title: alertTitle)
+                AlertController.Alert(msg: msg, title: title).showAlert(self)
             } else {
                 textField.resignFirstResponder()
                 passwordTextField.becomeFirstResponder()
@@ -117,24 +121,12 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
     
     // MARK: UI update functions
     
-    func dispatchAlert(msg: String?, title: String?) {
-        
-        let alert = AlertController.Alert(msg: msg, title: title)
-        alert.dispatchAlert(self)
-    }
-    
-    func showAlert(msg: String?, var title: String?) {
-        
-        let alert = AlertController.Alert(msg: msg, title: title)
-        alert.showAlert(self)
-    }
-    
     func loginWithFB(alertTitle: String) -> Void {
         UdacityCLient.shared_instance().loginWithFacebook() { success, errorMsg in
             if success {
                 self.completeLogin()
             } else {
-                self.dispatchAlert(errorMsg, title: alertTitle)
+                AlertController.Alert(msg: errorMsg, title: alertTitle).dispatchAlert(self)
             }
         }
     }
@@ -144,7 +136,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
             if success {
                 self.completeLogin()
             } else {
-                self.dispatchAlert(errorMsg, title: alertTitle)
+                AlertController.Alert(msg: errorMsg, title: alertTitle).dispatchAlert(self)
             }
         }
     }

@@ -15,6 +15,7 @@ class AddStudentLocationViewController: UIViewController, UITextFieldDelegate {
     
     override func viewWillAppear(animated: Bool) {
         locationInputTextField.becomeFirstResponder()
+        super.viewWillAppear(animated)
     }
     
     // MARK: Action buttons

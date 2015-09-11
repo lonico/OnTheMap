@@ -21,11 +21,11 @@ class ParseClient {
             if errorMsg != nil { // Handle error...
                 println("ERROR: \(errorMsg)")
             } else {
-                println(results)
+                // println(results)     // TODO
                 var new_studentLocations = [StudentLocation]()
                 
                 for record in results! {
-                    println("----\n\(record)\n")
+                    // println("----\n\(record)\n")    // TODO
                     let student = StudentLocation(studentLocationDir: record as StudentLocationDir)
                     new_studentLocations.append(student)
                 }
@@ -35,23 +35,22 @@ class ParseClient {
         }
     }
     
-
     static func sendRequestForGetStudentLocations(completion_handler: (results: [StudentLocationDir]?, errorMsg: String?) -> Void) {
         
         let url = ParseClient.Constants.baseURL + ParseClient.Methods.StudentLocation
         
         let parms = [
-            ParseClient.JsonRequestKeys.limit: 4,
+            ParseClient.JsonRequestKeys.limit: 100,
             ParseClient.JsonRequestKeys.order: "-updatedAt"
         ]
         
         HttpClient.shared_instance().httpGet(url, parameters: parms, httpHeaderFields: ParseClient.HTTPHeaderFields.keyvalues, offset: 0) { data, error in
             
             var errorMsg: String! = nil
-            println(NSString(data: data, encoding: NSUTF8StringEncoding))  // TODO
+            // println(NSString(data: data, encoding: NSUTF8StringEncoding))  // TODO
 
             if let error = error {
-                println(error)
+                println(error)      // TODO
                 errorMsg = error
                 completion_handler(results: nil, errorMsg: errorMsg)
             } else {
@@ -63,7 +62,7 @@ class ParseClient {
                         if let got_results = result.valueForKey("results") as? [[String: AnyObject]] {
                             results = got_results
                         } else {
-                            errorMsg = ParseClient.getCodeAndErrorMessageFromResult(result, missing_key: "results")
+                            errorMsg = ParseClient.getCodeAndErrorMessageFromResult(result, missing_keys: ["results"])
                         }
                     }
                     completion_handler(results: results, errorMsg: errorMsg)
@@ -76,15 +75,14 @@ class ParseClient {
     
     // MARK: post a new student location
     
-    static func postStudentLocation(studentLocation: StudentLocation, completion_handler: (updatedAt: String?, errorMsg: String?) -> Void) {
-        ParseClient.sendRequestForPostStudentLocation(studentLocation) { updatedAt, errorMsg in
-            println("updatedAt: \(updatedAt)")
-            completion_handler(updatedAt: updatedAt, errorMsg: errorMsg)
+    static func postStudentLocation(studentLocation: StudentLocation, completion_handler: (createdAt: String?, updatedAt: String?, errorMsg: String?) -> Void) {
+        ParseClient.sendRequestForPostStudentLocation(studentLocation) { createdAt, updatedAt, errorMsg in
+            
+            completion_handler(createdAt: createdAt, updatedAt: updatedAt, errorMsg: errorMsg)
         }
-        
     }
     
-    static func sendRequestForPostStudentLocation(studentLocation: StudentLocation, completion_handler: (updatedAt: String?, errorMsg: String?) -> Void) {
+    static func sendRequestForPostStudentLocation(studentLocation: StudentLocation, completion_handler: (createdAt: String?, updatedAt: String?, errorMsg: String?) -> Void) {
         
         let url = ParseClient.Constants.baseURL + ParseClient.Methods.StudentLocation
         let parms = [String: AnyObject]()
@@ -99,20 +97,23 @@ class ParseClient {
             if let error = error {
                 println(error)
                 errorMsg = error
-                completion_handler(updatedAt: nil, errorMsg: errorMsg)
+                completion_handler(createdAt: nil, updatedAt: nil, errorMsg: errorMsg)
             } else {
                 HttpClient.parseJSONWithCompletionHandler(data) { result, error in
+                    var createdAt: String! = nil
                     var updatedAt: String! = nil
                     if let error = error {
                         errorMsg = error.localizedDescription
                     } else {
-                        if let got_updatedAt = result.valueForKey(JsonResponseKeys.updatedAt) as? String {
-                            updatedAt = got_updatedAt
+                        if let value = result.valueForKey(JsonResponseKeys.createdAt) as? String {
+                            createdAt = value
+                        } else if let value = result.valueForKey(JsonResponseKeys.updatedAt) as? String {
+                            updatedAt = value
                         } else {
-                            errorMsg = self.getCodeAndErrorMessageFromResult(result, missing_key: JsonResponseKeys.updatedAt)
+                            errorMsg = self.getCodeAndErrorMessageFromResult(result, missing_keys: [JsonResponseKeys.createdAt, JsonResponseKeys.updatedAt])
                         }
                     }
-                    completion_handler(updatedAt: updatedAt, errorMsg: errorMsg)
+                    completion_handler(createdAt: createdAt, updatedAt: updatedAt, errorMsg: errorMsg)
                 }
             }
         }
@@ -120,7 +121,7 @@ class ParseClient {
     
     // MARK: support functions
     
-    static func getCodeAndErrorMessageFromResult(result: AnyObject, missing_key: String!) -> String {
+    static func getCodeAndErrorMessageFromResult(result: AnyObject, missing_keys: [String]!) -> String {
         
         var errorMsg: String
         if let code = result.valueForKey(JsonResponseKeys.code) as? Int {
@@ -131,8 +132,9 @@ class ParseClient {
             errorMsg = errorMsg + " (\(code))"
         } else {
             errorMsg = "Unexpected error, "
-            if (missing_key != nil) {
-                errorMsg += "no '\(missing_key)' and "
+            if (missing_keys != nil) {
+                let missing = ", nor ".join(missing_keys)
+                errorMsg += "no '\(missing)' and "
             }
             errorMsg += "no '\(JsonResponseKeys.code)' key"
         }
@@ -179,6 +181,7 @@ class ParseClient {
     
     struct JsonResponseKeys {
         
+        static let createdAt = "createdAt"
         static let updatedAt = "updatedAt"
         static let code = "code"
         static let error = "error"
@@ -186,11 +189,11 @@ class ParseClient {
     }
     
     // skip uniqueKey and mapString
-    static let JsonStudentAllKeysForStrings = [JsonStudentKeys.firstname, JsonStudentKeys.lastname, JsonStudentKeys.mediaURL]
+    static let JsonStudentAllInputKeysForStrings = [JsonStudentKeys.firstname, JsonStudentKeys.lastname, JsonStudentKeys.mediaURL]
     
-    static let JsonStudentAllKeysForDoubles = [JsonStudentKeys.latitude, JsonStudentKeys.longitude]
+    static let JsonStudentAllInputKeysForDoubles = [JsonStudentKeys.latitude, JsonStudentKeys.longitude]
     
-    static let JsonStudentAllKeys = JsonStudentAllKeysForStrings + JsonStudentAllKeysForDoubles + [JsonStudentKeys.uniqueKey] //, JsonStudentKeys.mapString]
+    static let JsonStudentAllKeys = JsonStudentAllInputKeysForStrings + JsonStudentAllInputKeysForDoubles + [JsonStudentKeys.uniqueKey, JsonStudentKeys.mapString]
     
     struct HTTPHeaderFields {
         
@@ -202,5 +205,4 @@ class ParseClient {
             "X-Parse-REST-API-Key": "QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY"
             ]
     }
-    
 }

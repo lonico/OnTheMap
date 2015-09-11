@@ -19,36 +19,41 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         super.viewDidLoad()
         ParseClient.shared_instance().getStudentLocations() { success, errorMsg in
             if success {
-                // get student information, including their location
-                let studentLocations = ParseClient.shared_instance().studentLocations
-                println(studentLocations.count)
-                
-                // We will create an MKPointAnnotation for each entry in studentLocations. The
-                // point annotations will be stored in this array, and then provided to the map view.
-                var annotations = [MKPointAnnotation]()
-                
-                for studentLocation in studentLocations {
-                    // Here we create the annotation and set its coordinate, title, and subtitle properties
-                    var annotation = MKPointAnnotation()
-                    annotation.coordinate = studentLocation.getCoordinateFromStudent()
-                    annotation.title = studentLocation.getFullNameFromStudent()
-                    annotation.subtitle = studentLocation.getURLFromStudent()
-                    
-                    // Finally we place the annotation in an array of annotations.
-                    annotations.append(annotation)
-                }
-                
-                // When the array is complete, we add the annotations to the map.
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.mapView.addAnnotations(annotations)
-                }
+                self.setAnnotationsForStudentLocations()
             } else {
-                println("ERROR: \(errorMsg)")
+                AlertController.Alert(msg: errorMsg, title: "Error reaading student locations").dispatchAlert(self)
             }
         }
-        
     }
     
+    // This is called at init, but also on a refresh, hence removeAnnotations
+    
+    func setAnnotationsForStudentLocations() {
+        // get student information, including their location
+        let studentLocations = ParseClient.shared_instance().studentLocations
+        
+        // We will create an MKPointAnnotation for each entry in studentLocations. The
+        // point annotations will be stored in this array, and then provided to the map view.
+        var annotations = [MKPointAnnotation]()
+        
+        for studentLocation in studentLocations {
+            // Here we create the annotation and set its coordinate, title, and subtitle properties
+            var annotation = MKPointAnnotation()
+            annotation.coordinate = studentLocation.getCoordinateFromStudent()
+            annotation.title = studentLocation.getFullNameFromStudent()
+            annotation.subtitle = studentLocation.getURLFromStudent()
+            
+            // Finally we place the annotation in an array of annotations.
+            annotations.append(annotation)
+        }
+        
+        // When the array is complete, we add the annotations to the map.
+        dispatch_async(dispatch_get_main_queue()) {
+            self.mapView.removeAnnotations(self.mapView.annotations)
+            self.mapView.addAnnotations(annotations)
+            println(">>> Annotations: \(self.mapView.annotations.count)")
+        }
+    }
     
     // MARK: - MKMapViewDelegate
     
@@ -73,8 +78,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         return pinView
     }
-    
-    
+
     // This delegate method is implemented to respond to taps. It opens the system browser
     // to the URL specified in the annotationViews subtitle property.
     func mapView(mapView: MKMapView!, annotationView: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {

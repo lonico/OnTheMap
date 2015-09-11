@@ -37,11 +37,10 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
-    
     // MARK: Action buttons
     
     @IBAction func cancelButtonTouchUp(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        dismissViewControllerAnimated(true, completion: nil)
     }
     
     @IBAction func submitButtonTouchUp(sender: UIButton) {
@@ -60,10 +59,14 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
                 if userInfo != nil {
                     let studentLocation = StudentLocation(uniqueKey: userInfo.uniqueKey, firstName: userInfo.firstName, lastName: userInfo.lastName, mapString: self.mapString, mediaURL: self.mediaURL.text, latitude: latitude, longitude: longitude)
                     
-                    ParseClient.postStudentLocation(studentLocation) { updatedAt, errorMsg in
-                        
-                        if updatedAt != nil {
-                            alert = AlertController.Alert(msg: "posted info for (userInfo.firstName) (userInfo.lastName)", title: "Success")
+                    println(">>> key \(userInfo.uniqueKey)")
+                    ParseClient.postStudentLocation(studentLocation) { createdAt, updatedAt, errorMsg in
+                        if createdAt != nil || updatedAt != nil {
+                            alert = AlertController.Alert(msg: "posted info for \(userInfo.firstName) \(userInfo.lastName)", title: "Success") { action in
+                                self.dismissViewControllerAnimated(true) {
+                                    self.presentingViewController!.dismissViewControllerAnimated(true, completion: nil)
+                                }
+                            }
                         } else {
                             alert = AlertController.Alert(msg: errorMsg, title: "Error, cannot post user info")
                         }
@@ -79,8 +82,5 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
                 }
             }
         }
-    }
-    
-    
-    
+    }    
 }
