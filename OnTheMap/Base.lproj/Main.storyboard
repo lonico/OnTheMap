@@ -149,18 +149,25 @@
                                     <outlet property="delegate" destination="vXZ-lx-hvc" id="kIi-Dh-zUv"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="GAQ-du-AfE">
+                                <rect key="frame" x="282" y="80" width="37" height="37"/>
+                                <color key="color" red="0.2457955805" green="0.30257714870000002" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="centerX" secondItem="vJP-6M-VkU" secondAttribute="centerX" id="4xp-67-moc"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="gby-ta-UPU" secondAttribute="bottom" constant="20" id="5Hd-gA-7sE"/>
                             <constraint firstAttribute="trailingMargin" secondItem="gby-ta-UPU" secondAttribute="trailing" constant="4" id="6I1-fH-cmv"/>
+                            <constraint firstItem="GAQ-du-AfE" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="60" id="6qy-Hc-ba7"/>
                             <constraint firstItem="vJP-6M-VkU" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="QCc-T8-j4V"/>
                             <constraint firstItem="gby-ta-UPU" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="4" id="cho-w9-XoU"/>
                             <constraint firstAttribute="centerY" secondItem="vJP-6M-VkU" secondAttribute="centerY" id="k5i-RD-Rav"/>
+                            <constraint firstAttribute="centerX" secondItem="GAQ-du-AfE" secondAttribute="centerX" id="zI8-hU-XBB"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="GAQ-du-AfE" id="ri2-v4-3C2"/>
                         <outlet property="emailTextField" destination="8c1-KQ-wsh" id="SJt-bm-6TX"/>
                         <outlet property="facebookLoginButton" destination="gby-ta-UPU" id="YvQ-yf-Zt5"/>
                         <outlet property="passwordTextField" destination="fLL-Lh-wNS" id="mVA-Ur-iAz"/>
@@ -260,25 +267,52 @@
                                             <action selector="cancelButtonTouchUp:" destination="wrD-Zh-xja" eventType="touchUpInside" id="69N-9D-O6t"/>
                                         </connections>
                                     </button>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Please enter URL" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TXI-mW-vSS">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Please enter URL" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="TXI-mW-vSS">
                                         <rect key="frame" x="16" y="75" width="568" height="30"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="7t2-Qq-APw"/>
                                         </constraints>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="URL"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                                                <color key="value" white="0.81201171875" alpha="1" colorSpace="calibratedWhite"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <outlet property="delegate" destination="wrD-Zh-xja" id="qwA-L9-eGC"/>
                                         </connections>
                                     </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zzi-jq-Vrk">
+                                        <rect key="frame" x="238" y="113" width="124" height="25"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="25" id="O6y-p8-0Xg"/>
+                                            <constraint firstAttribute="width" constant="124" id="PEc-be-t6E"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <state key="normal" title="Check URL in Safari">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.CornerRadius">
+                                                <integer key="value" value="4"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="checkLinkInSafariButtonTouchUp:" destination="wrD-Zh-xja" eventType="touchUpInside" id="R0S-uc-yvE"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.090196078430000007" green="0.56862745100000001" blue="0.89411764709999997" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="D9A-7P-MUp" firstAttribute="top" secondItem="kyq-H4-ihd" secondAttribute="top" constant="17" id="8Ju-p9-IOy"/>
+                                    <constraint firstItem="zzi-jq-Vrk" firstAttribute="top" secondItem="TXI-mW-vSS" secondAttribute="bottom" constant="8" id="FuQ-DO-VuY"/>
                                     <constraint firstAttribute="centerY" secondItem="TXI-mW-vSS" secondAttribute="centerY" id="HTR-Va-ELr"/>
                                     <constraint firstItem="TXI-mW-vSS" firstAttribute="leading" secondItem="kyq-H4-ihd" secondAttribute="leading" constant="16" id="Ixp-mZ-NxU"/>
+                                    <constraint firstAttribute="centerX" secondItem="zzi-jq-Vrk" secondAttribute="centerX" constant="-0.5" id="Jv3-MZ-eGC"/>
                                     <constraint firstAttribute="centerX" secondItem="TXI-mW-vSS" secondAttribute="centerX" id="Uci-UY-s74"/>
                                     <constraint firstAttribute="trailing" secondItem="D9A-7P-MUp" secondAttribute="trailing" constant="8" id="XYy-es-PIe"/>
                                     <constraint firstAttribute="height" constant="180" id="ibu-CW-7g1"/>
@@ -289,12 +323,13 @@
                                 <rect key="frame" x="0.0" y="180" width="600" height="420"/>
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vbg-fG-glS">
-                                <rect key="frame" x="265" y="538" width="70" height="30"/>
+                                <rect key="frame" x="260" y="533" width="80" height="35"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="70" id="ZBw-fY-Upj"/>
-                                    <constraint firstAttribute="height" constant="30" id="wMH-0I-eYw"/>
+                                    <constraint firstAttribute="width" constant="80" id="ZBw-fY-Upj"/>
+                                    <constraint firstAttribute="height" constant="35" id="wMH-0I-eYw"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <state key="normal" title="Submit">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -302,11 +337,21 @@
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.CornerRadius">
                                         <integer key="value" value="4"/>
                                     </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                        <integer key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="layer.borderColor">
+                                        <color key="value" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="submitButtonTouchUp:" destination="wrD-Zh-xja" eventType="touchUpInside" id="iZb-WQ-6si"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="if6-uY-pGO">
+                                <rect key="frame" x="282" y="372" width="37" height="37"/>
+                                <color key="color" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -315,15 +360,19 @@
                             <constraint firstAttribute="trailingMargin" secondItem="BPQ-fu-w7H" secondAttribute="trailing" constant="-16" id="Ac2-Xk-5Oc"/>
                             <constraint firstItem="BPQ-fu-w7H" firstAttribute="top" secondItem="kyq-H4-ihd" secondAttribute="bottom" id="BTq-VA-l6N"/>
                             <constraint firstItem="Hip-io-yPh" firstAttribute="top" secondItem="BPQ-fu-w7H" secondAttribute="bottom" id="LF0-6m-33Q"/>
+                            <constraint firstItem="BPQ-fu-w7H" firstAttribute="centerY" secondItem="if6-uY-pGO" secondAttribute="centerY" id="Nf8-Qr-9hh"/>
                             <constraint firstItem="BPQ-fu-w7H" firstAttribute="leading" secondItem="xyO-kS-vo3" secondAttribute="leadingMargin" constant="-16" id="Wcx-WD-08W"/>
                             <constraint firstItem="kyq-H4-ihd" firstAttribute="leading" secondItem="xyO-kS-vo3" secondAttribute="leadingMargin" constant="-16" id="bL8-XK-IXU"/>
+                            <constraint firstItem="BPQ-fu-w7H" firstAttribute="centerX" secondItem="if6-uY-pGO" secondAttribute="centerX" id="sAs-rp-nvm"/>
                             <constraint firstItem="Hip-io-yPh" firstAttribute="top" secondItem="Vbg-fG-glS" secondAttribute="bottom" constant="32" id="wjl-A5-6df"/>
                             <constraint firstItem="BPQ-fu-w7H" firstAttribute="centerX" secondItem="Vbg-fG-glS" secondAttribute="centerX" id="zRo-07-WIL"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activiyIndicator" destination="if6-uY-pGO" id="cJX-i9-MdF"/>
                         <outlet property="mapView" destination="BPQ-fu-w7H" id="1Xa-VI-5Kg"/>
                         <outlet property="mediaURL" destination="TXI-mW-vSS" id="ZTb-g1-pAt"/>
+                        <outlet property="viewForInputTestField" destination="kyq-H4-ihd" id="2t7-lA-5yz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3w0-IU-GfI" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -428,12 +477,17 @@
                                             <outlet property="delegate" destination="gDU-sI-lax" id="JEI-e2-O03"/>
                                         </connections>
                                     </textField>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="mkh-Yn-hNm">
+                                        <rect key="frame" x="282" y="132" width="37" height="37"/>
+                                    </activityIndicatorView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.0" green="0.64431850243421052" blue="0.91449938322368418" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="UKO-uC-TWF" secondAttribute="trailing" constant="16" id="JbW-wn-4AM"/>
+                                    <constraint firstAttribute="centerX" secondItem="mkh-Yn-hNm" secondAttribute="centerX" id="ctO-fY-Tnh"/>
                                     <constraint firstItem="UKO-uC-TWF" firstAttribute="leading" secondItem="AxP-oM-qjU" secondAttribute="leading" constant="16" id="cuZ-fR-vfJ"/>
                                     <constraint firstItem="UKO-uC-TWF" firstAttribute="top" secondItem="AxP-oM-qjU" secondAttribute="top" constant="40" id="nwF-i6-u6I"/>
+                                    <constraint firstAttribute="centerY" secondItem="mkh-Yn-hNm" secondAttribute="centerY" id="sZq-td-HtF"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oai-VF-5ym" userLabel="FindButtonView">
@@ -491,7 +545,10 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="mkh-Yn-hNm" id="xrp-13-N9C"/>
                         <outlet property="locationInputTextField" destination="UKO-uC-TWF" id="G8J-MP-SgC"/>
+                        <outlet property="titleLabel" destination="DAF-3q-quJ" id="LW9-DK-8vA"/>
+                        <outlet property="viewForTextField" destination="AxP-oM-qjU" id="dZ0-RR-E8K"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s5g-g9-1Fj" userLabel="First Responder" sceneMemberID="firstResponder"/>

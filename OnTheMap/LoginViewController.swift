@@ -13,10 +13,12 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
     
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var facebookLoginButton: FBSDKLoginButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        activityIndicator.stopAnimating()
         // Do any additional setup after loading the view, typically from a nib.
         let accessToken = FBSDKAccessToken.currentAccessToken()
         if let accessToken = accessToken {
@@ -32,6 +34,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
     
     func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) -> Void {
         
+        activityIndicator.stopAnimating()
         let alertTitle = "Facebook login failed"
         if let error = error {
             let errorMsg = error.domain + ": " + error.description
@@ -48,7 +51,10 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
     
     func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) -> Void {
         
+        activityIndicator.startAnimating()
         UdacityCLient.shared_instance().logout() { success, errorMsg in
+            
+            self.activityIndicator.stopAnimating()
             var msg: String? = ""
             var alertTitle = ""
             if success {
@@ -122,7 +128,10 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
     // MARK: UI update functions
     
     func loginWithFB(alertTitle: String) -> Void {
+        activityIndicator.startAnimating()
         UdacityCLient.shared_instance().loginWithFacebook() { success, errorMsg in
+            
+            self.activityIndicator.stopAnimating()
             if success {
                 self.completeLogin()
             } else {
@@ -132,7 +141,10 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
     }
     
     func loginWithEmailID(email: String , password: String, alertTitle: String) -> Void {
+        activityIndicator.startAnimating()
         UdacityCLient.shared_instance().loginWithEmailID(email, password: password) { success, errorMsg in
+            
+            self.activityIndicator.stopAnimating()
             if success {
                 self.completeLogin()
             } else {
@@ -142,6 +154,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
     }
    
     func completeLogin() -> Void {
+        
         println(">>> Login Successful")
         dispatch_async(dispatch_get_main_queue()) {
             let controller = self.storyboard!.instantiateViewControllerWithIdentifier("navViewController") as! UIViewController

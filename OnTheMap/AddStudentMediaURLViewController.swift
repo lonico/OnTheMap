@@ -11,13 +11,20 @@ import MapKit
 
 class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
 
+    
+
+    
     var placemark: CLPlacemark!
     var mapString: String!
     
     @IBOutlet weak var mediaURL: UITextField!
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var activiyIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var viewForInputTestField: UIView!
     
     override func viewWillAppear(animated: Bool) {
+        activiyIndicator.hidesWhenStopped = true
+        setAlpha(1)
         if let placemark = placemark {
             var pmCircularRegion = placemark.region as! CLCircularRegion
             var region = MKCoordinateRegionMakeWithDistance(pmCircularRegion.center, pmCircularRegion.radius, pmCircularRegion.radius)
@@ -43,6 +50,19 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
         dismissViewControllerAnimated(true, completion: nil)
     }
     
+    @IBAction func checkLinkInSafariButtonTouchUp(sender: UIButton) {
+        if mediaURL.text == "" {
+            let alert = AlertController.Alert(msg: "please enter URL", title: "Empty URL string")
+            alert.showAlert(self)
+        } else {
+            let app = UIApplication.sharedApplication()
+            let result = app.openURL(NSURL(string: mediaURL.text)!)
+            if !result {
+                AlertController.Alert(msg: mediaURL.text, title: "Failed to open URL").showAlert(self)
+            }
+        }
+    }
+    
     @IBAction func submitButtonTouchUp(sender: UIButton) {
         taskForSubmitAction()
     }
@@ -54,6 +74,8 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
         } else {
             let latitude = placemark.location.coordinate.latitude
             let longitude = placemark.location.coordinate.longitude
+            activiyIndicator.startAnimating()
+            setAlpha(0.5)
             UdacityCLient.shared_instance().getUserInfo() { userInfo, errorMsg in
                 var alert: AlertController.Alert! = nil
                 if userInfo != nil {
@@ -68,6 +90,7 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
                         } else {
                             alert = AlertController.Alert(msg: errorMsg, title: "Error, cannot post user info")
                         }
+                        self.dismissProgressIndicators()
                         alert.dispatchAlert(self)
                     }
                 } else if errorMsg != nil {
@@ -75,11 +98,26 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
                 } else {
                     alert = AlertController.Alert(msg: "Internal error: userInfo and errorMsg are both nil", title: "Error, cannot get user info")
                 }
+
                 if alert != nil {
+                    self.dismissProgressIndicators()
                     alert.dispatchAlert(self)
                 }
             }
         }
+    }
+    
+    func dismissProgressIndicators() {
+        dispatch_async(dispatch_get_main_queue()) {
+            self.activiyIndicator.stopAnimating()
+            self.setAlpha(1)
+        }
+    }
+    
+    func setAlpha(alpha: CGFloat) -> Void {
+        mediaURL.alpha = alpha
+        viewForInputTestField.alpha = alpha
+        mapView.alpha = alpha
     }
     
     func popOut() -> Void {
