@@ -54,7 +54,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
         activityIndicator.startAnimating()
         UdacityCLient.shared_instance().logout() { success, errorMsg in
             
-            self.activityIndicator.stopAnimating()
+            self.stopActivityIndicator()
             var msg: String? = ""
             var alertTitle = ""
             if success {
@@ -131,7 +131,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
         activityIndicator.startAnimating()
         UdacityCLient.shared_instance().loginWithFacebook() { success, errorMsg in
             
-            self.activityIndicator.stopAnimating()
+            self.stopActivityIndicator()
             if success {
                 self.completeLogin()
             } else {
@@ -144,7 +144,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
         activityIndicator.startAnimating()
         UdacityCLient.shared_instance().loginWithEmailID(email, password: password) { success, errorMsg in
             
-            self.activityIndicator.stopAnimating()
+            self.stopActivityIndicator()
             if success {
                 self.completeLogin()
             } else {
@@ -159,6 +159,12 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
         dispatch_async(dispatch_get_main_queue()) {
             let controller = self.storyboard!.instantiateViewControllerWithIdentifier("navViewController") as! UIViewController
             self.presentViewController(controller, animated: true, completion: nil)
+        }
+    }
+    
+    func stopActivityIndicator() {
+        dispatch_async(dispatch_get_main_queue()) {
+            self.activityIndicator.stopAnimating()
         }
     }
     
