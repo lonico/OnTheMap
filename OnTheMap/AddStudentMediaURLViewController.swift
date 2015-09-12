@@ -47,7 +47,7 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
         taskForSubmitAction()
     }
     
-    func taskForSubmitAction() {
+    func taskForSubmitAction() -> Void {
         if mediaURL.text == "" {
             let alert = AlertController.Alert(msg: "please enter URL", title: "Empty URL string")
             alert.showAlert(self)
@@ -63,9 +63,7 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
                     ParseClient.postStudentLocation(studentLocation) { createdAt, updatedAt, errorMsg in
                         if createdAt != nil || updatedAt != nil {
                             alert = AlertController.Alert(msg: "posted info for \(userInfo.firstName) \(userInfo.lastName)", title: "Success") { action in
-                                self.dismissViewControllerAnimated(true) {
-                                    self.presentingViewController!.dismissViewControllerAnimated(true, completion: nil)
-                                }
+                                    self.popOut()
                             }
                         } else {
                             alert = AlertController.Alert(msg: errorMsg, title: "Error, cannot post user info")
@@ -82,5 +80,13 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
                 }
             }
         }
-    }    
+    }
+    
+    func popOut() -> Void {
+        dispatch_async(dispatch_get_main_queue()) {
+            let presentingVC = self.presentingViewController
+            self.dismissViewControllerAnimated(false, completion: nil)
+            presentingVC?.dismissViewControllerAnimated(false, completion: nil)
+        }
+    }
 }

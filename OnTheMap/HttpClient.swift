@@ -19,7 +19,7 @@ class HttpClient: NSObject {
     
     // MARK: http methods
     
-    func httpGet(urlString: String, parameters: [String:AnyObject]!, httpHeaderFields: [String: String]!, offset: Int, completion_handler: (data: NSData!, error: String!) -> Void) {
+    func httpGet(urlString: String, parameters: [String:AnyObject]!, httpHeaderFields: [String: String]!, offset: Int, completion_handler: (data: NSData!, error: String!) -> Void) -> Void {
         
         // build url with parameters
         let urlWithParams = urlString + HttpClient.escapedParameters(parameters)
@@ -53,7 +53,7 @@ class HttpClient: NSObject {
     }
     
     
-    func httpPost(urlString: String, parameters: [String:AnyObject]!, jsonBody: [String:AnyObject], httpHeaderFields: [String: String]!, offset: Int, completion_handler: (data: NSData!, error: String!) -> Void) {
+    func httpPost(urlString: String, parameters: [String:AnyObject]!, jsonBody: [String:AnyObject], httpHeaderFields: [String: String]!, offset: Int, completion_handler: (data: NSData!, error: String!) -> Void) -> Void {
         
         // build url with parameters
         let urlWithParams = urlString + HttpClient.escapedParameters(parameters)
@@ -96,7 +96,7 @@ class HttpClient: NSObject {
         task.resume()
     }
     
-    func httpDelete(urlString: String, parameters: [String:AnyObject]!, completion_handler: (data: NSData!, error: String!) -> Void) {
+    func httpDelete(urlString: String, parameters: [String:AnyObject]!, completion_handler: (data: NSData!, error: String!) -> Void) -> Void {
 
         // build url with parameters
         let urlWithParams = urlString + HttpClient.escapedParameters(parameters)
@@ -155,7 +155,7 @@ class HttpClient: NSObject {
     }
     
     /* Helper: Given raw JSON, return a usable Foundation object */
-    class func parseJSONWithCompletionHandler(data: NSData, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
+    class func parseJSONWithCompletionHandler(data: NSData, completionHandler: (result: AnyObject!, error: NSError?) -> Void) -> Void {
         
         var parsingError: NSError? = nil
         let parsedResult: AnyObject? = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError)

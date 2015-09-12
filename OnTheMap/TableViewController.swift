@@ -33,7 +33,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     // MARK: Table view delegates
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) -> Void {
         
         let app = UIApplication.sharedApplication()
         let cell = tableView.cellForRowAtIndexPath(indexPath)
@@ -49,7 +49,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     
     // Mark: refresh method
-    func refreshTable() {
+    func refreshTable() -> Void {
         dispatch_async(dispatch_get_main_queue()) {
             self.tableView?.reloadData()
             self.tableView?.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: .Top, animated: true)

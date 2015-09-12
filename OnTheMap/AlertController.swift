@@ -21,7 +21,7 @@ struct AlertController {
             self.handler = handler
         }
         
-        func showAlert(vc: UIViewController) {
+        func showAlert(vc: UIViewController) -> Void {
             
             var valid_title = title
             if valid_title == nil {
@@ -42,7 +42,7 @@ struct AlertController {
             vc.presentViewController(alertController, animated: true, completion: nil)
         }
         
-        func dispatchAlert(vc: UIViewController) {
+        func dispatchAlert(vc: UIViewController) -> Void {
             
             dispatch_async(dispatch_get_main_queue()) {
             self.showAlert(vc)

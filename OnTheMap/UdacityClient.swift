@@ -16,7 +16,7 @@ class UdacityCLient: NSObject {
     
     // MARK: Udacity login API, using 2 different json bodies, one for email/password, the other with FB auth token
     
-    func loginWithEmailID(emailId: String, password: String, completion_handler: (success: Bool, errorMsg: String?) -> Void) {
+    func loginWithEmailID(emailId: String, password: String, completion_handler: (success: Bool, errorMsg: String?) -> Void) -> Void {
         
         let jsonBody = [ UdacityCLient.JsonRequestKeys.udacity:
                             [ UdacityCLient.JsonRequestKeys.udacity_userid: emailId,
@@ -26,7 +26,7 @@ class UdacityCLient: NSObject {
         login(jsonBody, completion_handler: completion_handler)
     }
     
-    func loginWithFacebook(completion_handler: (success: Bool, errorMsg: String?) -> Void) {
+    func loginWithFacebook(completion_handler: (success: Bool, errorMsg: String?) -> Void) -> Void {
         
         let accessToken = FBSDKAccessToken.currentAccessToken().tokenString
 
@@ -39,7 +39,7 @@ class UdacityCLient: NSObject {
     
     // MARK: common login call
     
-    func login(jsonBody: [String: AnyObject], completion_handler: (success: Bool, errorMsg: String?) -> Void) {
+    func login(jsonBody: [String: AnyObject], completion_handler: (success: Bool, errorMsg: String?) -> Void) -> Void {
         
         let url = UdacityCLient.Constants.baseURL + UdacityCLient.Methods.session
         
@@ -76,7 +76,7 @@ class UdacityCLient: NSObject {
     
     // MARK: logout APIs
     
-    func logout(completion_handler: (success: Bool, errorMsg: String?) -> Void) {
+    func logout(completion_handler: (success: Bool, errorMsg: String?) -> Void) -> Void {
         
         logoutFromUdacity() { success, errorMsg in
             self.logoutFromFB()
@@ -94,7 +94,7 @@ class UdacityCLient: NSObject {
         }
     }
     
-    func logoutFromUdacity(completion_handler: (success: Bool, errorMsg: String?) -> Void) {
+    func logoutFromUdacity(completion_handler: (success: Bool, errorMsg: String?) -> Void) -> Void {
     
         let url = UdacityCLient.Constants.baseURL + UdacityCLient.Methods.session
             
@@ -118,7 +118,7 @@ class UdacityCLient: NSObject {
     
     // MARK: user data API
     
-    func getUserInfo(completion_handler: (userInfo: UserInfo!, errorMsg: String?) -> Void) {
+    func getUserInfo(completion_handler: (userInfo: UserInfo!, errorMsg: String?) -> Void) -> Void {
         getDataForUser(udacity_user_id) { data, errorMsg in
             var errorMsg: String! = nil
             var userInfo: UserInfo! = nil
@@ -134,7 +134,7 @@ class UdacityCLient: NSObject {
         }
     }
     
-    func getDataForUser(userid: String, completion_handler: (data: NSData!, error: String!) -> Void) {
+    func getDataForUser(userid: String, completion_handler: (data: NSData!, error: String!) -> Void) -> Void {
     
         let url = NSURL(string: "https://www.udacity.com/api/users/\(userid)")!
         let request = NSMutableURLRequest(URL: url)

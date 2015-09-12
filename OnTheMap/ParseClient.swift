@@ -15,7 +15,7 @@ class ParseClient {
     
     // MARK: get list of student locations
     
-    func getStudentLocations(completion_handler: (success: Bool, errorMsg: String?) -> Void) {
+    func getStudentLocations(completion_handler: (success: Bool, errorMsg: String?) -> Void) -> Void {
         
         ParseClient.sendRequestForGetStudentLocations() { results, errorMsg in
             if errorMsg != nil { // Handle error...
@@ -35,7 +35,7 @@ class ParseClient {
         }
     }
     
-    static func sendRequestForGetStudentLocations(completion_handler: (results: [StudentLocationDir]?, errorMsg: String?) -> Void) {
+    static func sendRequestForGetStudentLocations(completion_handler: (results: [StudentLocationDir]?, errorMsg: String?) -> Void) -> Void {
         
         let url = ParseClient.Constants.baseURL + ParseClient.Methods.StudentLocation
         
@@ -75,14 +75,14 @@ class ParseClient {
     
     // MARK: post a new student location
     
-    static func postStudentLocation(studentLocation: StudentLocation, completion_handler: (createdAt: String?, updatedAt: String?, errorMsg: String?) -> Void) {
+    static func postStudentLocation(studentLocation: StudentLocation, completion_handler: (createdAt: String?, updatedAt: String?, errorMsg: String?) -> Void) -> Void {
         ParseClient.sendRequestForPostStudentLocation(studentLocation) { createdAt, updatedAt, errorMsg in
             
             completion_handler(createdAt: createdAt, updatedAt: updatedAt, errorMsg: errorMsg)
         }
     }
     
-    static func sendRequestForPostStudentLocation(studentLocation: StudentLocation, completion_handler: (createdAt: String?, updatedAt: String?, errorMsg: String?) -> Void) {
+    static func sendRequestForPostStudentLocation(studentLocation: StudentLocation, completion_handler: (createdAt: String?, updatedAt: String?, errorMsg: String?) -> Void) -> Void {
         
         let url = ParseClient.Constants.baseURL + ParseClient.Methods.StudentLocation
         let parms = [String: AnyObject]()

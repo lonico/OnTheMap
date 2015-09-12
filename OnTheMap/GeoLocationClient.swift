@@ -13,7 +13,7 @@ struct GeoLocationClient {
     
     // MARK: forward geocoding
     
-    static func getPlacemark(address: String, completion_handler: (placemark: CLPlacemark!, alert: AlertController.Alert!) -> Void) {
+    static func getPlacemark(address: String, completion_handler: (placemark: CLPlacemark!, alert: AlertController.Alert!) -> Void) -> Void {
         
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(address) { placemarks, error in

@@ -37,7 +37,7 @@ class AddStudentLocationViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: Support functions
     
-    func taskForFindButtonTouchUp() {
+    func taskForFindButtonTouchUp() -> Void {
         let location = locationInputTextField.text
         if location == "" {
             let alert = AlertController.Alert(msg: "please enter an address", title: "Empty location")

@@ -30,7 +30,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
     
     // MARK: FBSDKLoginButtonDelegate functions
     
-    func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
+    func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) -> Void {
         
         let alertTitle = "Facebook login failed"
         if let error = error {
@@ -46,7 +46,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
         }
     }
     
-    func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
+    func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) -> Void {
         
         UdacityCLient.shared_instance().logout() { success, errorMsg in
             var msg: String? = ""
@@ -79,7 +79,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
     
     // MARK: support function
     
-    func actionLoginWithEmailPassword() {
+    func actionLoginWithEmailPassword() -> Void {
         
         let email = emailTextField.text
         let password = passwordTextField.text
@@ -141,7 +141,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
         }
     }
    
-    func completeLogin() {
+    func completeLogin() -> Void {
         println(">>> Login Successful")
         dispatch_async(dispatch_get_main_queue()) {
             let controller = self.storyboard!.instantiateViewControllerWithIdentifier("navViewController") as! UIViewController

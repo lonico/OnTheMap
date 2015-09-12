@@ -28,7 +28,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     // This is called at init, but also on a refresh, hence removeAnnotations
     
-    func setAnnotationsForStudentLocations() {
+    func setAnnotationsForStudentLocations() -> Void {
         // get student information, including their location
         let studentLocations = ParseClient.shared_instance().studentLocations
         
@@ -81,7 +81,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
     // This delegate method is implemented to respond to taps. It opens the system browser
     // to the URL specified in the annotationViews subtitle property.
-    func mapView(mapView: MKMapView!, annotationView: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+    func mapView(mapView: MKMapView!, annotationView: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) -> Void {
         
         if control == annotationView.rightCalloutAccessoryView {
             let app = UIApplication.sharedApplication()
