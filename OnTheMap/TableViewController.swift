@@ -37,13 +37,18 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         let app = UIApplication.sharedApplication()
         let cell = tableView.cellForRowAtIndexPath(indexPath)
-        if let url = cell?.detailTextLabel?.text {
-            let result = app.openURL(NSURL(string: url)!)
-            if !result {
-                AlertController.Alert(msg: url, title: "Failed to open URL").dispatchAlert(self)
+        if let urlString = cell?.detailTextLabel?.text {
+            if let url = NSURL(string: urlString) {
+                let result = app.openURL(url)
+                if !result {
+                    AlertController.Alert(msg: urlString, title: "Failed to open URL").showAlert(self)
+                }
+            } else {
+                AlertController.Alert(msg: urlString, title: "Failed to open URL").showAlert(self)
             }
+            
         } else {
-            AlertController.Alert(msg: "no URL was provided", title: "Empty URL").dispatchAlert(self)
+            AlertController.Alert(msg: "no URL was provided", title: "Empty URL").showAlert(self)
         }
     }
     

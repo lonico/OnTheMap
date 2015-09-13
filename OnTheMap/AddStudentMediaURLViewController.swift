@@ -56,9 +56,14 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
             alert.showAlert(self)
         } else {
             let app = UIApplication.sharedApplication()
-            let result = app.openURL(NSURL(string: mediaURL.text)!)
-            if !result {
-                AlertController.Alert(msg: mediaURL.text, title: "Failed to open URL").showAlert(self)
+            let urlString = mediaURL.text
+            if let url = NSURL(string: urlString) {
+                let result = app.openURL(url)
+                if !result {
+                    AlertController.Alert(msg: urlString, title: "Failed to open URL").showAlert(self)
+                }
+            } else {
+                AlertController.Alert(msg: urlString, title: "Failed to open URL").showAlert(self)
             }
         }
     }

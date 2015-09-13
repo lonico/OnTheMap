@@ -25,8 +25,6 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
             println(">>> already logged in")
             let alertTitle = "Facebook login failed"
             loginWithFB(alertTitle)
-        } else {
-            emailTextField.becomeFirstResponder()
         }
     }
     
@@ -111,11 +109,11 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
         
         let alertTitle = "Login error"
         if textField == emailTextField {
+            textField.resignFirstResponder()
             if emailTextField.text == "" {
                 let msg = "Empty email field"
                 AlertController.Alert(msg: msg, title: title).showAlert(self)
             } else {
-                textField.resignFirstResponder()
                 passwordTextField.becomeFirstResponder()
             }
         } else if textField == passwordTextField {
