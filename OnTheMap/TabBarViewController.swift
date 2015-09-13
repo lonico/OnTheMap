@@ -39,6 +39,9 @@ class TabBarViewController: UITabBarController {
                     if let tablevc = vc as? TableViewController {
                         tablevc.refreshTable()
                     }
+                    if let tablevc = vc as? MeTableViewController {
+                        tablevc.refreshTable()
+                    }
                     if let mapvc = vc as?  MapViewController {
                         mapvc.setAnnotationsForStudentLocations()
                     }

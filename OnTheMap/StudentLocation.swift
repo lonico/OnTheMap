@@ -21,11 +21,11 @@ struct StudentLocation {
     let latitude: Double
     let longitude: Double
     
-    func getFullNameFromStudent() -> String? {
+    func getFullNameFromStudent() -> String {
         return join(" ", [self.firstName, self.lastName])
     }
     
-    func getURLFromStudent() -> String? {
+    func getURLFromStudent() -> String {
         return self.mediaURL
     }
     
@@ -66,11 +66,13 @@ extension StudentLocation {
     
     init(studentLocationDir dir: StudentLocationDir) {
         
+        var _uniqueKey = ""
         var _firstName = ""
         var _lastName  = ""
         var _mediaURL  = ""
         var _latitude  = 0.0
         var _longitude = 0.0
+        var _mapString = ""
         
         for key in ParseClient.JsonStudentAllInputKeysForStrings {
             var value = ""
@@ -78,9 +80,11 @@ extension StudentLocation {
                 value = stringValue
             }
             switch key {
+            case ParseClient.JsonStudentKeys.uniqueKey: _uniqueKey = value
             case ParseClient.JsonStudentKeys.firstname: _firstName = value
             case ParseClient.JsonStudentKeys.lastname: _lastName = value
             case ParseClient.JsonStudentKeys.mediaURL: _mediaURL = value
+            case ParseClient.JsonStudentKeys.mapString: _mapString = value
             default: break  // make Xcode happy, even though all cases are exhausted
             }
             
@@ -97,15 +101,13 @@ extension StudentLocation {
             }
         }
         
+        uniqueKey = _uniqueKey
         firstName = _firstName
         lastName  = _lastName
         mediaURL  = _mediaURL
         latitude  = _latitude
         longitude = _longitude
-        
-        // save a bit of time, as these are not used as inputs
-        uniqueKey = "N/A"
-        mapString = "N/A"
+        mapString = _mapString
     }
 }
 

@@ -237,6 +237,52 @@
             </objects>
             <point key="canvasLocation" x="2435" y="540"/>
         </scene>
+        <!--Me-->
+        <scene sceneID="c0w-f2-uoC">
+            <objects>
+                <viewController id="TNX-xg-x7q" customClass="MeTableViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="d9A-3a-lRV"/>
+                        <viewControllerLayoutGuide type="bottom" id="BrD-DU-tyd"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="VWf-zM-3wg">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="oRT-jb-GJQ">
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="meViewCell" id="6Ad-gw-1pq">
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6Ad-gw-1pq" id="dmf-cy-pVq">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="TNX-xg-x7q" id="tHX-jy-K1U"/>
+                                    <outlet property="delegate" destination="TNX-xg-x7q" id="kkD-EA-AuX"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="oRT-jb-GJQ" firstAttribute="top" secondItem="d9A-3a-lRV" secondAttribute="bottom" id="Fow-E4-uaM"/>
+                            <constraint firstItem="oRT-jb-GJQ" firstAttribute="leading" secondItem="VWf-zM-3wg" secondAttribute="leadingMargin" constant="-16" id="cv9-Wc-uKL"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="oRT-jb-GJQ" secondAttribute="bottom" id="glM-tM-oKq"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="oRT-jb-GJQ" secondAttribute="trailing" constant="-16" id="s6V-2I-nS4"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Me" image="pin" id="2rs-v6-EpK"/>
+                    <connections>
+                        <outlet property="tableView" destination="oRT-jb-GJQ" id="ZfQ-za-yKa"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bzv-Hi-viR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2435" y="1206"/>
+        </scene>
         <!--Add Student MediaURL View Controller-->
         <scene sceneID="a6J-hv-ssd">
             <objects>
@@ -595,6 +641,7 @@
                         <outlet property="refreshButton" destination="PbX-hS-qCP" id="SKF-zR-k7r"/>
                         <segue destination="XKo-jO-nLL" kind="relationship" relationship="viewControllers" id="QpR-DC-N7V"/>
                         <segue destination="mP7-wd-TAc" kind="relationship" relationship="viewControllers" id="eta-X3-DMf"/>
+                        <segue destination="TNX-xg-x7q" kind="relationship" relationship="viewControllers" id="tNd-z0-GGH"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yaR-OA-O8h" userLabel="First Responder" sceneMemberID="firstResponder"/>

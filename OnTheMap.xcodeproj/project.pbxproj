@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C0702F821BA4ECA100556E8E /* MeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0702F811BA4ECA100556E8E /* MeTableViewController.swift */; };
 		C07E5B791B9B4D7300B38046 /* HttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07E5B781B9B4D7300B38046 /* HttpClient.swift */; };
 		C07E5B7D1B9BA01300B38046 /* ParseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07E5B7C1B9BA01300B38046 /* ParseClient.swift */; };
 		C07E5B811B9CADD800B38046 /* StudentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07E5B801B9CADD800B38046 /* StudentLocation.swift */; };
@@ -39,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C0702F811BA4ECA100556E8E /* MeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeTableViewController.swift; sourceTree = "<group>"; };
 		C07E5B781B9B4D7300B38046 /* HttpClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpClient.swift; sourceTree = "<group>"; };
 		C07E5B7C1B9BA01300B38046 /* ParseClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ParseClient.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		C07E5B801B9CADD800B38046 /* StudentLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentLocation.swift; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 				C0C819551B97F85100DFBA3D /* TableViewController.swift */,
 				C07E5B861B9E036700B38046 /* AddStudentLocationViewController.swift */,
 				C07E5B8A1B9E778000B38046 /* AddStudentMediaURLViewController.swift */,
+				C0702F811BA4ECA100556E8E /* MeTableViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -295,6 +298,7 @@
 				C07E5B871B9E036700B38046 /* AddStudentLocationViewController.swift in Sources */,
 				C082D9CE1B91520700D04C2F /* LoginViewController.swift in Sources */,
 				C07E5B8D1B9FDE8000B38046 /* GeoLocationClient.swift in Sources */,
+				C0702F821BA4ECA100556E8E /* MeTableViewController.swift in Sources */,
 				C082D9E91B95745F00D04C2F /* TabBarViewController.swift in Sources */,
 				C07E5B891B9E056D00B38046 /* AlertController.swift in Sources */,
 				C082D9DD1B955F4A00D04C2F /* MapViewController.swift in Sources */,

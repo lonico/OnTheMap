@@ -40,7 +40,8 @@ class ParseClient {
         let url = ParseClient.Constants.baseURL + ParseClient.Methods.StudentLocation
         
         let parms = [
-            ParseClient.JsonRequestKeys.limit: 100,
+            ParseClient.JsonRequestKeys.limit: 200,
+            ParseClient.JsonRequestKeys.skip: 0,
             ParseClient.JsonRequestKeys.order: "-updatedAt"
         ]
         
@@ -165,6 +166,7 @@ class ParseClient {
         
         static let limit = "limit"
         static let order = "order"
+        static let skip = "skip"
     }
     
     struct JsonStudentKeys {
@@ -176,7 +178,6 @@ class ParseClient {
         static let longitude = "longitude"
         static let latitude = "latitude"
         static let mapString = "mapString"
-
     }
     
     struct JsonResponseKeys {
@@ -189,11 +190,11 @@ class ParseClient {
     }
     
     // skip uniqueKey and mapString
-    static let JsonStudentAllInputKeysForStrings = [JsonStudentKeys.firstname, JsonStudentKeys.lastname, JsonStudentKeys.mediaURL]
+    static let JsonStudentAllInputKeysForStrings = [JsonStudentKeys.uniqueKey, JsonStudentKeys.firstname, JsonStudentKeys.lastname, JsonStudentKeys.mediaURL, JsonStudentKeys.mapString]
     
     static let JsonStudentAllInputKeysForDoubles = [JsonStudentKeys.latitude, JsonStudentKeys.longitude]
     
-    static let JsonStudentAllKeys = JsonStudentAllInputKeysForStrings + JsonStudentAllInputKeysForDoubles + [JsonStudentKeys.uniqueKey, JsonStudentKeys.mapString]
+    static let JsonStudentAllKeys = JsonStudentAllInputKeysForStrings + JsonStudentAllInputKeysForDoubles
     
     struct HTTPHeaderFields {
         
