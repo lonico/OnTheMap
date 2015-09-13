@@ -63,10 +63,44 @@ struct StudentLocation {
     
     func getStudentRepr() -> String {
         
-        let _long = String(format: "%.3f", longitude)
-        let _lat = String(format: "%.3f", latitude)
+        let _long = doubleToTextWithNWSE(longitude, direction: .longitude)
+        let _lat = doubleToTextWithNWSE(latitude, direction: .latitude)
         return "\n".join([uniqueKey, getFullNameFromStudent(), mapString, _long + " - " + _lat, mediaURL])
     }
+    
+    func doubleToTextWithNWSE(var value: Double, direction: Direction) -> String {
+        var suffix = ""
+        
+        if value < 0 {
+            switch direction {
+            case .longitude: suffix = LongitudeSuffix.negative
+            case .latitude: suffix = LatitudeSuffix.negative
+            }
+            value = -value
+        } else if value > 0 {
+            switch direction {
+            case .longitude: suffix = LongitudeSuffix.positive
+            case .latitude: suffix = LatitudeSuffix.positive
+            }
+        }
+        return String(format: "%.3f%@", value, suffix)
+    }
+    
+    enum Direction {
+    case longitude
+    case latitude
+    }
+    
+    struct LongitudeSuffix {
+        static let positive = "E"
+        static let negative = "W"
+    }
+    
+    struct LatitudeSuffix {
+        static let positive = "N"
+        static let negative = "S"
+    }
+
 }
 
 extension StudentLocation {
