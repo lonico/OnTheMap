@@ -43,21 +43,17 @@ class MeTableViewController: UIViewController, UITableViewDataSource, UITableVie
         return cell
     }
     
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        println("deleting")
+    }
     
     // MARK: Table view delegates
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) -> Void {
         
         let app = UIApplication.sharedApplication()
-        let cell = tableView.cellForRowAtIndexPath(indexPath)
-        if let url = cell?.detailTextLabel?.text {
-            let result = app.openURL(NSURL(string: url)!)
-            if !result {
-                AlertController.Alert(msg: url, title: "Failed to open URL").dispatchAlert(self)
-            }
-        } else {
-            AlertController.Alert(msg: "no URL was provided", title: "Empty URL").dispatchAlert(self)
-        }
+        let studentLocation = myLocations[indexPath.row]
+        AlertController.Alert(msg: studentLocation.getStudentRepr(), title: "Details").dispatchAlert(self)
     }
     
     // Support functions

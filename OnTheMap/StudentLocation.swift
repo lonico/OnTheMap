@@ -60,6 +60,13 @@ struct StudentLocation {
         default: return "N/A"
         }
     }
+    
+    func getStudentRepr() -> String {
+        
+        let _long = String(format: "%.3f", longitude)
+        let _lat = String(format: "%.3f", latitude)
+        return "\n".join([uniqueKey, getFullNameFromStudent(), mapString, _long + " - " + _lat, mediaURL])
+    }
 }
 
 extension StudentLocation {
