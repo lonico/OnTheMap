@@ -33,7 +33,7 @@ class TabBarViewController: UITabBarController {
     
     @IBAction func refreshButtonTouch(sender: UIBarButtonItem) {
 
-        ParseClient.shared_instance().getStudentLocations() { success, errorMsg in
+        ParseClient.shared_instance().getAllStudentLocations() { success, errorMsg in
             if success {
                 for vc in self.viewControllers as! [UIViewController] {
                     if let tablevc = vc as? TableViewController {

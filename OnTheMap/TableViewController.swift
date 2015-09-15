@@ -57,7 +57,9 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     func refreshTable() -> Void {
         dispatch_async(dispatch_get_main_queue()) {
             self.tableView?.reloadData()
-            self.tableView?.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: .Top, animated: true)
+            if self.tableView?.numberOfRowsInSection(0) > 0 {
+                self.tableView?.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: .Top, animated: true)
+            }
         }
     }
 }

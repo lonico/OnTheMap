@@ -17,7 +17,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        ParseClient.shared_instance().getStudentLocations() { success, errorMsg in
+        ParseClient.shared_instance().getAllStudentLocations() { success, errorMsg in
             if success {
                 self.setAnnotationsForStudentLocations()
             } else {
@@ -51,7 +51,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         dispatch_async(dispatch_get_main_queue()) {
             self.mapView.removeAnnotations(self.mapView.annotations)
             self.mapView.addAnnotations(annotations)
-            println(">>> Annotations: \(self.mapView.annotations.count)")
+            println(">>> " + __FUNCTION__ + " Annotations: \(self.mapView.annotations.count)")
         }
     }
     

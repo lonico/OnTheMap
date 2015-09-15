@@ -12,36 +12,86 @@ import Foundation
 class ParseClient {
 
     var studentLocations = [StudentLocation]()
+    private var newStudentLocations = [StudentLocation]()
     
     // MARK: get list of student locations
     
-    func getStudentLocations(completion_handler: (success: Bool, errorMsg: String?) -> Void) -> Void {
+    func getAllStudentLocations(completion_handler: (success: Bool, errorMsg: String?) -> Void) -> Void {
         
-        ParseClient.sendRequestForGetStudentLocations() { results, errorMsg in
+        // println(">>> " + __FUNCTION__)
+        let skip = 0
+        let count = 50
+        newStudentLocations = []
+        getStudentLocations(skip, count: count) {  success, errorMsg in
             if errorMsg != nil { // Handle error...
-                println("ERROR: \(errorMsg)")
+                println("ERROR getAll: \(errorMsg)")
             } else {
-                // println(results)     // TODO
-                var new_studentLocations = [StudentLocation]()
-                
-                for record in results! {
-                    // println("----\n\(record)\n")    // TODO
-                    let student = StudentLocation(studentLocationDir: record as StudentLocationDir)
-                    new_studentLocations.append(student)
-                }
-                self.studentLocations = new_studentLocations
+                // println(">>> " + __FUNCTION__ + " count new: \(self.newStudentLocations.count)")
+                self.studentLocations = self.newStudentLocations
             }
             completion_handler(success: errorMsg == nil, errorMsg: errorMsg)
         }
     }
+
+/* 
+    This will recursively get all records:
     
-    static func sendRequestForGetStudentLocations(completion_handler: (results: [StudentLocationDir]?, errorMsg: String?) -> Void) -> Void {
+    >>> bundle_id: com.udacity.OnTheMap
+    >>> already logged in
+    >>> Login Successful
+    >>> getAllStudentLocations
+    >>> getStudentLocations(_:count:completion_handler:) skip: 0, count rec: 50
+    >>> getStudentLocations(_:count:completion_handler:) skip: 50, count rec: 100
+    >>> getStudentLocations(_:count:completion_handler:) skip: 100, count rec: 150
+    >>> getStudentLocations(_:count:completion_handler:) skip: 150, count rec: 153
+    >>> getStudentLocations(_:count:completion_handler:) skip: 150, DONE
+    >>> getStudentLocations(_:count:completion_handler:) skip+count: 150, count rec: 153
+    >>> getStudentLocations(_:count:completion_handler:) skip+count: 100, count rec: 153
+    >>> getStudentLocations(_:count:completion_handler:) skip+count: 50, count rec: 153
+    >>> getAllStudentLocations count new: 153
+    >>> setAnnotationsForStudentLocations() Annotations: 153
+*/
+    func getStudentLocations(skip: Int, count: Int, completion_handler: (success: Bool, errorMsg: String?) -> Void) -> Void {
+        
+        ParseClient.sendRequestForGetStudentLocations(skip, count: count) { results, errorMsg in
+            if errorMsg != nil { // Handle error...
+                println("ERROR get: \(errorMsg)")
+                completion_handler(success: errorMsg == nil, errorMsg: errorMsg)
+            } else {
+                // println(results)     // TODO
+                for record in results! {
+                    // println("----\n\(record)\n")    // TODO
+                    let student = StudentLocation(studentLocationDir: record as StudentLocationDir)
+                    self.newStudentLocations.append(student)
+                }
+                // println(">>> " + __FUNCTION__ + " skip: \(skip), count rec: \(self.newStudentLocations.count)")
+                if results!.count == count {
+                    // we got all records we asked for, so there may be more
+                    self.getStudentLocations(skip + count, count: count) { success, errorMsg in
+                        if errorMsg != nil { // Handle error...
+                            println("ERROR getAll: \(errorMsg)")
+                        } else {
+                            // println(">>> " + __FUNCTION__ + " skip+count: \(skip+count), count rec: \(self.newStudentLocations.count)")
+                        }
+                        completion_handler(success: errorMsg == nil, errorMsg: errorMsg)
+                    }
+                } else {
+                    // no more data, we're done
+                    // println(">>> " + __FUNCTION__ + " skip: \(skip), DONE")
+                    completion_handler(success: errorMsg == nil, errorMsg: errorMsg)
+
+                }
+            }
+        }
+    }
+    
+    static func sendRequestForGetStudentLocations(skip: Int, count: Int, completion_handler: (results: [StudentLocationDir]?, errorMsg: String?) -> Void) -> Void {
         
         let url = ParseClient.Constants.baseURL + ParseClient.Methods.StudentLocation
         
-        let parms = [
-            ParseClient.JsonRequestKeys.limit: 200,
-            ParseClient.JsonRequestKeys.skip: 0,
+        let parms: [String: AnyObject] = [
+            ParseClient.JsonRequestKeys.limit: count,
+            ParseClient.JsonRequestKeys.skip: skip,
             ParseClient.JsonRequestKeys.order: "-updatedAt"
         ]
         

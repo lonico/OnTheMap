@@ -20,12 +20,6 @@ class MeTableViewController: UIViewController, UITableViewDataSource, UITableVie
         super.viewWillAppear(animated)
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
     // MARK: - Table view data sources
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -62,7 +56,6 @@ class MeTableViewController: UIViewController, UITableViewDataSource, UITableVie
         
         var myLocations = [StudentLocation]()
         let uniqueKey = UdacityCLient.shared_instance().udacity_user_id
-        println(uniqueKey)
         for studentLocation in ParseClient.shared_instance().studentLocations {
             if studentLocation.uniqueKey == uniqueKey {
                 myLocations.append(studentLocation)
