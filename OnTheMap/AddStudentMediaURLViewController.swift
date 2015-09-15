@@ -10,9 +10,6 @@ import UIKit
 import MapKit
 
 class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
-
-    
-
     
     var placemark: CLPlacemark!
     var mapString: String!
@@ -84,13 +81,13 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
             UdacityCLient.shared_instance().getUserInfo() { userInfo, errorMsg in
                 var alert: AlertController.Alert! = nil
                 if userInfo != nil {
-                    let studentLocation = StudentLocation(uniqueKey: userInfo.uniqueKey, firstName: userInfo.firstName, lastName: userInfo.lastName, mapString: self.mapString, mediaURL: self.mediaURL.text, latitude: latitude, longitude: longitude)
+                    let studentLocation = StudentLocation(objectId: "", uniqueKey: userInfo.uniqueKey, firstName: userInfo.firstName, lastName: userInfo.lastName, mapString: self.mapString, mediaURL: self.mediaURL.text, latitude: latitude, longitude: longitude)
                     
                     println(">>> key \(userInfo.uniqueKey)")
-                    ParseClient.postStudentLocation(studentLocation) { createdAt, updatedAt, errorMsg in
+                    self.update(studentLocation)  { createdAt, updatedAt, errorMsg in
                         if createdAt != nil || updatedAt != nil {
                             alert = AlertController.Alert(msg: "posted info for \(userInfo.firstName) \(userInfo.lastName)", title: "Success") { action in
-                                    self.popOut()
+                                self.popOut()
                             }
                         } else {
                             alert = AlertController.Alert(msg: errorMsg, title: "Error, cannot post user info")
@@ -108,6 +105,21 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
                     self.dismissProgressIndicators()
                     alert.dispatchAlert(self)
                 }
+            }
+        }
+    }
+    
+    func update(studentLocation: StudentLocation, completion_handler: (createdAt: String?, updatedAt: String?, errorMsg: String?) -> Void) -> Void  {
+        
+        let objectId = studentLocation.findUniqueKey()
+        if objectId != nil {
+            println(">>> objectId: \(objectId)")
+            ParseClient.putStudentLocation(studentLocation, objectId: objectId) { createdAt, updatedAt, errorMsg in
+                completion_handler(createdAt: createdAt, updatedAt: updatedAt, errorMsg: errorMsg)
+            }
+        } else {
+            ParseClient.postStudentLocation(studentLocation) { createdAt, updatedAt, errorMsg in
+                completion_handler(createdAt: createdAt, updatedAt: updatedAt, errorMsg: errorMsg)
             }
         }
     }

@@ -13,6 +13,7 @@ typealias StudentLocationDir = [String: AnyObject]
 
 struct StudentLocation {
     
+    let objectId: String
     let uniqueKey: String
     let firstName: String
     let lastName: String
@@ -31,10 +32,6 @@ struct StudentLocation {
     
     func getCoordinateFromStudent() -> CLLocationCoordinate2D {
         
-        // Notice that the float values are being used to create CLLocationDegree values.
-        // This is a version of the Double type.
-        var latitude = CLLocationDegrees(self.latitude)
-        var longitude = CLLocationDegrees(self.longitude)
         // The lat and long are used to create a CLLocationCoordinates2D instance.
         let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         return coordinate
@@ -65,7 +62,7 @@ struct StudentLocation {
         
         let _long = doubleToTextWithNWSE(longitude, direction: .longitude)
         let _lat = doubleToTextWithNWSE(latitude, direction: .latitude)
-        return "\n".join([uniqueKey, getFullNameFromStudent(), mapString, _long + " - " + _lat, mediaURL])
+        return "\n".join([objectId + " - " + uniqueKey, getFullNameFromStudent(), mapString, _long + " - " + _lat, mediaURL])
     }
     
     func doubleToTextWithNWSE(var value: Double, direction: Direction) -> String {
@@ -86,6 +83,15 @@ struct StudentLocation {
         return String(format: "%.3f%@", value, suffix)
     }
     
+    func findUniqueKey() -> String! {
+        for aStudent in ParseClient.shared_instance().studentLocations {
+            if aStudent.uniqueKey == self.uniqueKey {
+                return aStudent.objectId
+            }
+        }
+        return nil
+    }
+    
     enum Direction {
     case longitude
     case latitude
@@ -103,10 +109,12 @@ struct StudentLocation {
 
 }
 
+// use an extension, so that the default initializer is also generated
 extension StudentLocation {
     
     init(studentLocationDir dir: StudentLocationDir) {
         
+        var _objectId = ""
         var _uniqueKey = ""
         var _firstName = ""
         var _lastName  = ""
@@ -121,6 +129,7 @@ extension StudentLocation {
                 value = stringValue
             }
             switch key {
+            case ParseClient.JsonStudentKeys.objectId: _objectId = value
             case ParseClient.JsonStudentKeys.uniqueKey: _uniqueKey = value
             case ParseClient.JsonStudentKeys.firstname: _firstName = value
             case ParseClient.JsonStudentKeys.lastname: _lastName = value
@@ -142,6 +151,7 @@ extension StudentLocation {
             }
         }
         
+        objectId  = _objectId
         uniqueKey = _uniqueKey
         firstName = _firstName
         lastName  = _lastName

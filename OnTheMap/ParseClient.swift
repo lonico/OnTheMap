@@ -170,6 +170,53 @@ class ParseClient {
         }
     }
     
+    // MARK: update (put) a student location
+    
+    static func putStudentLocation(studentLocation: StudentLocation, objectId: String, completion_handler: (createdAt: String?, updatedAt: String?, errorMsg: String?) -> Void) -> Void {
+        ParseClient.sendRequestForPutStudentLocation(studentLocation, objectId: objectId) { createdAt, updatedAt, errorMsg in
+            
+            completion_handler(createdAt: createdAt, updatedAt: updatedAt, errorMsg: errorMsg)
+        }
+    }
+    
+    static func sendRequestForPutStudentLocation(studentLocation: StudentLocation, objectId: String,completion_handler: (createdAt: String?, updatedAt: String?, errorMsg: String?) -> Void) -> Void {
+        
+        let url = ParseClient.Constants.baseURL + ParseClient.Methods.StudentLocation + "/" + objectId
+        let parms = [String: AnyObject]()
+        var jsonPostData = studentLocation.getDictFromStudent()
+        //jsonPostData.removeValueForKey(JsonStudentKeys.objectId)
+        
+        HttpClient.shared_instance().httpPut(url, parameters: parms, jsonBody: jsonPostData, httpHeaderFields: ParseClient.HTTPHeaderFields.keyvalues, offset: 0) { data, error in
+            var errorMsg: String! = nil
+            println(NSString(data: data, encoding: NSUTF8StringEncoding))
+            // Optional({"code":142,"error":"mapString is required for a Student Location"}
+            // Optional({"updatedAt":"2015-09-09T06:32:23.929Z","objectId":"VQPcz7uDwZ"}
+            
+            if let error = error {
+                println(error)
+                errorMsg = error
+                completion_handler(createdAt: nil, updatedAt: nil, errorMsg: errorMsg)
+            } else {
+                HttpClient.parseJSONWithCompletionHandler(data) { result, error in
+                    var createdAt: String! = nil
+                    var updatedAt: String! = nil
+                    if let error = error {
+                        errorMsg = error.localizedDescription
+                    } else {
+                        if let value = result.valueForKey(JsonResponseKeys.createdAt) as? String {
+                            createdAt = value
+                        } else if let value = result.valueForKey(JsonResponseKeys.updatedAt) as? String {
+                            updatedAt = value
+                        } else {
+                            errorMsg = self.getCodeAndErrorMessageFromResult(result, missing_keys: [JsonResponseKeys.createdAt, JsonResponseKeys.updatedAt])
+                        }
+                    }
+                    completion_handler(createdAt: createdAt, updatedAt: updatedAt, errorMsg: errorMsg)
+                }
+            }
+        }
+    }
+
     // MARK: support functions
     
     static func getCodeAndErrorMessageFromResult(result: AnyObject, missing_keys: [String]!) -> String {
@@ -216,17 +263,18 @@ class ParseClient {
         
         static let limit = "limit"
         static let order = "order"
-        static let skip = "skip"
+        static let skip  = "skip"
     }
     
     struct JsonStudentKeys {
         
+        static let objectId  = "objectId"
         static let uniqueKey = "uniqueKey"
         static let firstname = "firstName"
-        static let lastname = "lastName"
-        static let mediaURL = "mediaURL"
+        static let lastname  = "lastName"
+        static let mediaURL  = "mediaURL"
         static let longitude = "longitude"
-        static let latitude = "latitude"
+        static let latitude  = "latitude"
         static let mapString = "mapString"
     }
     
@@ -234,13 +282,13 @@ class ParseClient {
         
         static let createdAt = "createdAt"
         static let updatedAt = "updatedAt"
-        static let code = "code"
-        static let error = "error"
+        static let code      = "code"
+        static let error     = "error"
         
     }
     
     // skip uniqueKey and mapString
-    static let JsonStudentAllInputKeysForStrings = [JsonStudentKeys.uniqueKey, JsonStudentKeys.firstname, JsonStudentKeys.lastname, JsonStudentKeys.mediaURL, JsonStudentKeys.mapString]
+    static let JsonStudentAllInputKeysForStrings = [JsonStudentKeys.objectId, JsonStudentKeys.uniqueKey, JsonStudentKeys.firstname, JsonStudentKeys.lastname, JsonStudentKeys.mediaURL, JsonStudentKeys.mapString]
     
     static let JsonStudentAllInputKeysForDoubles = [JsonStudentKeys.latitude, JsonStudentKeys.longitude]
     

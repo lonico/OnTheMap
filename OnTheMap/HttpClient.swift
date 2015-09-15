@@ -96,6 +96,49 @@ class HttpClient: NSObject {
         task.resume()
     }
     
+    func httpPut(urlString: String, parameters: [String:AnyObject]!, jsonBody: [String:AnyObject], httpHeaderFields: [String: String]!, offset: Int, completion_handler: (data: NSData!, error: String!) -> Void) -> Void {
+        
+        // build url with parameters
+        let urlWithParams = urlString + HttpClient.escapedParameters(parameters)
+        
+        // build json body for posting data
+        var jsonifyError: NSError? = nil
+        let httpBody = NSJSONSerialization.dataWithJSONObject(jsonBody, options: nil, error: &jsonifyError)
+        if jsonifyError != nil {
+            completion_handler(data: nil, error: "APP Error in jsonBody: \(jsonifyError)")
+            return
+        }
+        
+        // build request
+        let request = NSMutableURLRequest(URL: NSURL(string: urlWithParams)!)
+        request.HTTPMethod = "PUT"
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.HTTPBody = httpBody
+        
+        if (httpHeaderFields != nil) {
+            for (key, value) in httpHeaderFields {
+                request.addValue(value, forHTTPHeaderField: key)
+            }
+        }
+        
+        // send request
+        let task = session.dataTaskWithRequest(request) { data, response, error in
+            var dataWithOffset: NSData! = nil
+            var errorMsg: String! = nil
+            if error != nil {
+                errorMsg = error.localizedDescription
+            } else {
+                // get data for completion handler
+                dataWithOffset = data.subdataWithRange(NSMakeRange(offset, data.length - offset)) /* subset response data! */
+                // println(NSString(data: dataWithOffset, encoding: NSUTF8StringEncoding))     // TODO
+            }
+            completion_handler(data: dataWithOffset, error: errorMsg)
+        }
+        
+        task.resume()
+    }
+    
     func httpDelete(urlString: String, parameters: [String:AnyObject]!, completion_handler: (data: NSData!, error: String!) -> Void) -> Void {
 
         // build url with parameters

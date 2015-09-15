@@ -35,6 +35,5 @@ struct GeoLocationClient {
             }
             completion_handler(placemark: studentPlacemark, alert: alert)
         }
-        
     }
 }
