@@ -47,6 +47,7 @@ struct StudentLocation {
     
     func getValueForFieldName(key: String) -> AnyObject {
         switch key {
+        case ParseClient.JsonStudentKeys.objectId: return self.objectId
         case ParseClient.JsonStudentKeys.uniqueKey: return self.uniqueKey
         case ParseClient.JsonStudentKeys.firstname: return self.firstName
         case ParseClient.JsonStudentKeys.lastname: return self.lastName
@@ -83,7 +84,7 @@ struct StudentLocation {
         return String(format: "%.3f%@", value, suffix)
     }
     
-    func findUniqueKey() -> String! {
+    func getObjectIdForUniqueKey() -> String! {
         for aStudent in ParseClient.shared_instance().studentLocations {
             if aStudent.uniqueKey == self.uniqueKey {
                 return aStudent.objectId

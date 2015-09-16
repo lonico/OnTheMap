@@ -81,9 +81,9 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
             UdacityCLient.shared_instance().getUserInfo() { userInfo, errorMsg in
                 var alert: AlertController.Alert! = nil
                 if userInfo != nil {
+                    
                     let studentLocation = StudentLocation(objectId: "", uniqueKey: userInfo.uniqueKey, firstName: userInfo.firstName, lastName: userInfo.lastName, mapString: self.mapString, mediaURL: self.mediaURL.text, latitude: latitude, longitude: longitude)
                     
-                    println(">>> key \(userInfo.uniqueKey)")
                     self.update(studentLocation)  { createdAt, updatedAt, errorMsg in
                         if createdAt != nil || updatedAt != nil {
                             alert = AlertController.Alert(msg: "posted info for \(userInfo.firstName) \(userInfo.lastName)", title: "Success") { action in
@@ -111,9 +111,8 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
     
     func update(studentLocation: StudentLocation, completion_handler: (createdAt: String?, updatedAt: String?, errorMsg: String?) -> Void) -> Void  {
         
-        let objectId = studentLocation.findUniqueKey()
+        let objectId = studentLocation.getObjectIdForUniqueKey()
         if objectId != nil {
-            println(">>> objectId: \(objectId)")
             ParseClient.putStudentLocation(studentLocation, objectId: objectId) { createdAt, updatedAt, errorMsg in
                 completion_handler(createdAt: createdAt, updatedAt: updatedAt, errorMsg: errorMsg)
             }
