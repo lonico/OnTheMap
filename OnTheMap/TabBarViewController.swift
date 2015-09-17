@@ -56,13 +56,13 @@ class TabBarViewController: UITabBarController {
         
         UdacityCLient.shared_instance().logout() { success, errorMsg in
             if success {
-                AlertController.Alert(msg: "", title: "Logged out").dispatchAlert(self)
+                let alert = AlertController.Alert(msg: "", title: "Logged out") { action in
+                    let controller = self.storyboard!.instantiateViewControllerWithIdentifier("loginViewController") as! UIViewController
+                    self.presentViewController(controller, animated: true, completion: nil)
+                }
+                alert.dispatchAlert(self)
             } else {
                 AlertController.Alert(msg: errorMsg, title: "Logout error").dispatchAlert(self)
-            }
-            dispatch_async(dispatch_get_main_queue()) {
-                let controller = self.storyboard!.instantiateViewControllerWithIdentifier("loginViewController") as! UIViewController
-                self.presentViewController(controller, animated: true, completion: nil)
             }
         }
     }
