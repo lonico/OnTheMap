@@ -72,7 +72,6 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
         actionLoginWithEmailPassword()
     }
     
-    
     @IBAction func signUpTouchUp(sender: UIButton) {
         if let udacityLink = NSURL(string : "https://www.udacity.com/account/auth#!/signup") {
             UIApplication.sharedApplication().openURL(udacityLink)
@@ -162,7 +161,6 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
             self.activityIndicator.stopAnimating()
         }
     }
-    
 }
 
 
