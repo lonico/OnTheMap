@@ -22,7 +22,6 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
         // Do any additional setup after loading the view, typically from a nib.
         let accessToken = FBSDKAccessToken.currentAccessToken()
         if let accessToken = accessToken {
-            println(">>> already logged in")
             let alertTitle = "Facebook login failed"
             loginWithFB(alertTitle)
         }
@@ -56,7 +55,6 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
             var msg: String? = ""
             var alertTitle = ""
             if success {
-                println(">>> Logged out")
                 alertTitle = "Facebook logout complete"
                 msg = ""
             } else {
@@ -153,7 +151,6 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
    
     func completeLogin() -> Void {
         
-        println(">>> Login Successful")
         dispatch_async(dispatch_get_main_queue()) {
             let controller = self.storyboard!.instantiateViewControllerWithIdentifier("navViewController") as! UIViewController
             self.presentViewController(controller, animated: true, completion: nil)

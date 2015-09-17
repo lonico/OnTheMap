@@ -55,11 +55,9 @@ class TabBarViewController: UITabBarController {
     @IBAction func logoutButtonTouch(sender: UIBarButtonItem) {
         
         UdacityCLient.shared_instance().logout() { success, errorMsg in
-            var msg: String? = ""
             if success {
-                println(">>> Logged out")
+                AlertController.Alert(msg: "", title: "Logged out").dispatchAlert(self)
             } else {
-                println(">>> \(errorMsg)")
                 AlertController.Alert(msg: errorMsg, title: "Logout error").dispatchAlert(self)
             }
             dispatch_async(dispatch_get_main_queue()) {

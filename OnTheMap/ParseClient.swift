@@ -58,9 +58,7 @@ class ParseClient {
                 println("ERROR get: \(errorMsg)")
                 completion_handler(success: errorMsg == nil, errorMsg: errorMsg)
             } else {
-                // println(results)     // TODO
                 for record in results! {
-                    // println("----\n\(record)\n")    // TODO
                     let student = StudentLocation(studentLocationDir: record as StudentLocationDir)
                     self.newStudentLocations.append(student)
                 }

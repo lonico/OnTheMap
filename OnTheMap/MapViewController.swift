@@ -51,7 +51,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         dispatch_async(dispatch_get_main_queue()) {
             self.mapView.removeAnnotations(self.mapView.annotations)
             self.mapView.addAnnotations(annotations)
+            #if DEBUG
             println(">>> " + __FUNCTION__ + " Annotations: \(self.mapView.annotations.count)")
+            #endif
         }
     }
     
