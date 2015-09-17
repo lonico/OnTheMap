@@ -101,7 +101,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
         }
     }
     
-    // MARK: UITextFieldDelegates
+    // MARK: UITextFieldDelegate
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         

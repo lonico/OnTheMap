@@ -26,8 +26,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
+    // MARK: support function
     // This is called at init, but also on a refresh, hence removeAnnotations
-    
     func setAnnotationsForStudentLocations() -> Void {
         // get student information, including their location
         let studentLocations = ParseClient.shared_instance().studentLocations

@@ -44,7 +44,7 @@ class HttpClient: NSObject {
             } else {
                 // get data for completion handler
                 dataWithOffset = data.subdataWithRange(NSMakeRange(offset, data.length - offset)) /* subset response data! */
-                //println(NSString(data: newData, encoding: NSUTF8StringEncoding))
+                //println(NSString(data: newData, encoding: NSUTF8StringEncoding)) // http GET
             }
             completion_handler(data: dataWithOffset, error: errorMsg)
         }
@@ -88,7 +88,7 @@ class HttpClient: NSObject {
             } else {
                 // get data for completion handler
                 dataWithOffset = data.subdataWithRange(NSMakeRange(offset, data.length - offset)) /* subset response data! */
-                // println(NSString(data: dataWithOffset, encoding: NSUTF8StringEncoding))     // TODO
+                // println(NSString(data: dataWithOffset, encoding: NSUTF8StringEncoding)) // http POST
             }
             completion_handler(data: dataWithOffset, error: errorMsg)
         }
@@ -131,7 +131,7 @@ class HttpClient: NSObject {
             } else {
                 // get data for completion handler
                 dataWithOffset = data.subdataWithRange(NSMakeRange(offset, data.length - offset)) /* subset response data! */
-                // println(NSString(data: dataWithOffset, encoding: NSUTF8StringEncoding))     // TODO
+                // println(NSString(data: dataWithOffset, encoding: NSUTF8StringEncoding)) // http PUT
             }
             completion_handler(data: dataWithOffset, error: errorMsg)
         }
@@ -169,7 +169,7 @@ class HttpClient: NSObject {
                 // get data for completion handler, offset is harcoded for udacity
                 let offset = 5
                 dataWithOffset = data.subdataWithRange(NSMakeRange(offset, data.length - offset)) /* subset response data! */
-                //println(NSString(data: newData, encoding: NSUTF8StringEncoding))
+                //println(NSString(data: newData, encoding: NSUTF8StringEncoding)) // http DELETE
             }
             completion_handler(data: dataWithOffset, error: errorMsg)
         }

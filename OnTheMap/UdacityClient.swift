@@ -42,7 +42,6 @@ class UdacityCLient: NSObject {
     func login(jsonBody: [String: AnyObject], completion_handler: (success: Bool, errorMsg: String?) -> Void) -> Void {
         
         let url = UdacityCLient.Constants.baseURL + UdacityCLient.Methods.session
-        
         HttpClient.shared_instance().httpPost(url, parameters: nil, jsonBody: jsonBody, httpHeaderFields: nil, offset: 5) { data, error in
             var errorMsg: String! = nil
             if let error = error {
@@ -70,7 +69,6 @@ class UdacityCLient: NSObject {
                     completion_handler(success: errorMsg == nil, errorMsg: errorMsg)
                 }
             }
-            
         }
     }
     
@@ -86,6 +84,7 @@ class UdacityCLient: NSObject {
     }
         
     func logoutFromFB() -> Void {
+        
         if let accessToken = FBSDKAccessToken.currentAccessToken() {
             FBSDKLoginManager().logOut()
         }
@@ -97,13 +96,13 @@ class UdacityCLient: NSObject {
     func logoutFromUdacity(completion_handler: (success: Bool, errorMsg: String?) -> Void) -> Void {
     
         let url = UdacityCLient.Constants.baseURL + UdacityCLient.Methods.session
-            
         HttpClient.shared_instance().httpDelete(url, parameters: nil) { data, error in
             var errorMsg: String! = nil
             if error != nil { // Handle error…
                 errorMsg = error
+                completion_handler(success: errorMsg == nil, errorMsg: errorMsg)
             } else {
-                // println(NSString(data: data, encoding: NSUTF8StringEncoding))
+                // println(NSString(data: data, encoding: NSUTF8StringEncoding)) // http DELETE logout
                 HttpClient.parseJSONWithCompletionHandler(data) { result, error in
                     if let error = error {
                         errorMsg = error.localizedDescription
@@ -116,43 +115,35 @@ class UdacityCLient: NSObject {
         }
     }
     
-    // MARK: user data API
+    // MARK: user data APIs
     
     func getUserInfo(completion_handler: (userInfo: UserInfo!, errorMsg: String?) -> Void) -> Void {
+        
         getDataForUser(udacity_user_id) { data, errorMsg in
             var errorMsg: String! = nil
             var userInfo: UserInfo! = nil
-            HttpClient.parseJSONWithCompletionHandler(data) { result, error in
-                if let error = error {
-                    errorMsg = error.localizedDescription
-                } else {
-                    (userInfo, errorMsg) = self.getAndSetUserInfoFromResult(result)
+            if let errorMsg = errorMsg {
+                completion_handler(userInfo: nil, errorMsg: errorMsg)
+            } else {
+                HttpClient.parseJSONWithCompletionHandler(data) { result, error in
+                    if let error = error {
+                        errorMsg = error.localizedDescription
+                    } else {
+                        (userInfo, errorMsg) = self.getAndSetUserInfoFromResult(result)
+                    }
+                    completion_handler(userInfo: userInfo, errorMsg: errorMsg)
                 }
-                completion_handler(userInfo: userInfo, errorMsg: errorMsg)
             }
-            
         }
     }
     
     func getDataForUser(userid: String, completion_handler: (data: NSData!, error: String!) -> Void) -> Void {
     
-        let url = NSURL(string: "https://www.udacity.com/api/users/\(userid)")!
-        let request = NSMutableURLRequest(URL: url)
-        let session = HttpClient.shared_instance().session
-        let task = session.dataTaskWithRequest(request) { data, response, error in
-            var errorMsg: String! = nil
-            var returnData: NSData! = nil
-            if error != nil { // Handle error...
-                errorMsg = error.localizedDescription
-            } else {
-                let newData = data.subdataWithRange(NSMakeRange(5, data.length - 5)) /* subset response data! */
-                // println(NSString(data: newData, encoding: NSUTF8StringEncoding)) // TODO
-                returnData = newData
-            }
-            completion_handler(data: returnData, error: errorMsg)
+        let url = "https://www.udacity.com/api/users/\(userid)"
+        HttpClient.shared_instance().httpGet(url, parameters: nil, httpHeaderFields: nil, offset: 5) { data, errorMsg in
+            // println(NSString(data: data, encoding: NSUTF8StringEncoding)) // http GET userinfo
+            completion_handler(data: data, error: errorMsg)
         }
-        task.resume()
-        
     }
     
     // MARK: support functions

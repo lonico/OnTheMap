@@ -69,6 +69,9 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
         taskForSubmitAction()
     }
     
+    
+    // MARK: support functions
+    
     func taskForSubmitAction() -> Void {
         if mediaURL.text == "" {
             let alert = AlertController.Alert(msg: "please enter URL", title: "Empty URL string")

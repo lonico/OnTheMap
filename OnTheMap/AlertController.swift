@@ -28,8 +28,6 @@ struct AlertController {
                 valid_title = "Alert"
             }
             let alertController = UIAlertController(title: valid_title, message: msg, preferredStyle: .Alert)
-            //Create and add the Cancel action
-            //let cancelAction = UIAlertControllerAction("Dismiss", preferredStyle: UIAlertControllerStyle.Alert, handler: handler)
             var cancelAction: UIAlertAction
             if handler == nil {
                 cancelAction = UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Cancel, handler: nil)

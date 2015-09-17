@@ -53,7 +53,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     
-    // Mark: refresh method
+    // MARK: refresh method
     func refreshTable() -> Void {
         dispatch_async(dispatch_get_main_queue()) {
             self.tableView?.reloadData()

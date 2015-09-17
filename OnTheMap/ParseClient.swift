@@ -18,7 +18,6 @@ class ParseClient {
     
     func getAllStudentLocations(completion_handler: (success: Bool, errorMsg: String?) -> Void) -> Void {
         
-        // println(">>> " + __FUNCTION__)
         let skip = 0
         let count = 50
         newStudentLocations = []
@@ -26,7 +25,9 @@ class ParseClient {
             if errorMsg != nil { // Handle error...
                 println("ERROR getAll: \(errorMsg)")
             } else {
-                // println(">>> " + __FUNCTION__ + " count new: \(self.newStudentLocations.count)")
+                #if DEBUG
+                println(">>> " + __FUNCTION__ + " count new: \(self.newStudentLocations.count)")
+                #endif
                 self.studentLocations = self.newStudentLocations
             }
             completion_handler(success: errorMsg == nil, errorMsg: errorMsg)
@@ -62,22 +63,27 @@ class ParseClient {
                     let student = StudentLocation(studentLocationDir: record as StudentLocationDir)
                     self.newStudentLocations.append(student)
                 }
-                // println(">>> " + __FUNCTION__ + " skip: \(skip), count rec: \(self.newStudentLocations.count)")
+                #if DEBUG
+                println(">>> " + __FUNCTION__ + " skip: \(skip), count rec: \(self.newStudentLocations.count)")
+                #endif
                 if results!.count == count {
                     // we got all records we asked for, so there may be more
                     self.getStudentLocations(skip + count, count: count) { success, errorMsg in
                         if errorMsg != nil { // Handle error...
                             println("ERROR getAll: \(errorMsg)")
                         } else {
-                            // println(">>> " + __FUNCTION__ + " skip+count: \(skip+count), count rec: \(self.newStudentLocations.count)")
+                            #if DEBUG
+                            println(">>> " + __FUNCTION__ + " skip+count: \(skip+count), count rec: \(self.newStudentLocations.count)")
+                            #endif
                         }
                         completion_handler(success: errorMsg == nil, errorMsg: errorMsg)
                     }
                 } else {
                     // no more data, we're done
-                    // println(">>> " + __FUNCTION__ + " skip: \(skip), DONE")
+                    #if DEBUG
+                    println(">>> " + __FUNCTION__ + " skip: \(skip), DONE")
+                    #endif
                     completion_handler(success: errorMsg == nil, errorMsg: errorMsg)
-
                 }
             }
         }
@@ -96,10 +102,10 @@ class ParseClient {
         HttpClient.shared_instance().httpGet(url, parameters: parms, httpHeaderFields: ParseClient.HTTPHeaderFields.keyvalues, offset: 0) { data, error in
             
             var errorMsg: String! = nil
-            // println(NSString(data: data, encoding: NSUTF8StringEncoding))  // TODO
+            // println(NSString(data: data, encoding: NSUTF8StringEncoding)) // http GET studentLocation
 
             if let error = error {
-                println(error)      // TODO
+                println(error)
                 errorMsg = error
                 completion_handler(results: nil, errorMsg: errorMsg)
             } else {
@@ -139,7 +145,7 @@ class ParseClient {
         
         HttpClient.shared_instance().httpPost(url, parameters: parms, jsonBody: jsonPostData, httpHeaderFields: ParseClient.HTTPHeaderFields.keyvalues, offset: 0) { data, error in
             var errorMsg: String! = nil
-            println(NSString(data: data, encoding: NSUTF8StringEncoding))
+            // println(NSString(data: data, encoding: NSUTF8StringEncoding)) // http POST studentLocation
             // Optional({"code":142,"error":"mapString is required for a Student Location"}
             // Optional({"updatedAt":"2015-09-09T06:32:23.929Z","objectId":"VQPcz7uDwZ"}
             
@@ -186,9 +192,7 @@ class ParseClient {
         
         HttpClient.shared_instance().httpPut(url, parameters: parms, jsonBody: jsonPostData, httpHeaderFields: ParseClient.HTTPHeaderFields.keyvalues, offset: 0) { data, error in
             var errorMsg: String! = nil
-            println(NSString(data: data, encoding: NSUTF8StringEncoding))
-            // Optional({"code":142,"error":"mapString is required for a Student Location"}
-            // Optional({"updatedAt":"2015-09-09T06:32:23.929Z","objectId":"VQPcz7uDwZ"}
+            // println(NSString(data: data, encoding: NSUTF8StringEncoding)) // http PUT studentLocation
             
             if let error = error {
                 println(error)
@@ -282,7 +286,6 @@ class ParseClient {
         static let updatedAt = "updatedAt"
         static let code      = "code"
         static let error     = "error"
-        
     }
     
     // skip uniqueKey and mapString
