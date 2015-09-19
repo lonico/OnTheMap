@@ -9,7 +9,7 @@
 import Foundation
 import MapKit
 
-typealias StudentLocationDir = [String: AnyObject]
+typealias StudentLocationDict = [String: AnyObject]
 
 struct StudentLocation {
     
@@ -63,12 +63,16 @@ struct StudentLocation {
         
         let _long = doubleToTextWithNWSE(longitude, direction: .longitude)
         let _lat = doubleToTextWithNWSE(latitude, direction: .latitude)
-        return "\n".join([objectId + " - " + uniqueKey, getFullNameFromStudent(), mapString, _long + " - " + _lat, mediaURL])
+        return "\n".join([objectId + " - " + uniqueKey,
+                          getFullNameFromStudent(),
+                          mapString,
+                          _long + " - " + _lat,
+                          mediaURL])
     }
     
     func doubleToTextWithNWSE(var value: Double, direction: Direction) -> String {
-        var suffix = ""
         
+        var suffix = ""
         if value < 0 {
             switch direction {
             case .longitude: suffix = LongitudeSuffix.negative
@@ -85,6 +89,7 @@ struct StudentLocation {
     }
     
     func getObjectIdForUniqueKey() -> String! {
+        
         for aStudent in ParseClient.shared_instance().studentLocations {
             if aStudent.uniqueKey == self.uniqueKey {
                 return aStudent.objectId
@@ -107,15 +112,14 @@ struct StudentLocation {
         static let positive = "N"
         static let negative = "S"
     }
-
 }
 
 // use an extension, so that the default initializer is also generated
 extension StudentLocation {
     
-    init(studentLocationDir dir: StudentLocationDir) {
+    init(studentLocationDict dir: StudentLocationDict) {
         
-        var _objectId = ""
+        var _objectId  = ""
         var _uniqueKey = ""
         var _firstName = ""
         var _lastName  = ""

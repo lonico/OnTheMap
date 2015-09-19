@@ -141,6 +141,9 @@ class HttpClient: NSObject {
     
     func httpDelete(urlString: String, parameters: [String:AnyObject]!, completion_handler: (data: NSData!, error: String!) -> Void) -> Void {
 
+        // offset is harcoded for udacity
+        let offset = 5
+
         // build url with parameters
         let urlWithParams = urlString + HttpClient.escapedParameters(parameters)
         
@@ -166,8 +169,7 @@ class HttpClient: NSObject {
             if error != nil {
                 errorMsg = error.localizedDescription
             } else {
-                // get data for completion handler, offset is harcoded for udacity
-                let offset = 5
+                // get data for completion handler
                 dataWithOffset = data.subdataWithRange(NSMakeRange(offset, data.length - offset)) /* subset response data! */
                 //println(NSString(data: newData, encoding: NSUTF8StringEncoding)) // http DELETE
             }

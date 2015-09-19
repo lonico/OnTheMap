@@ -89,18 +89,17 @@ class UdacityCLient: NSObject {
             FBSDKLoginManager().logOut()
         }
         else {
-            println(">>> Already logged out")
+            println(">>> Already logged out from FB")
         }
     }
     
     func logoutFromUdacity(completion_handler: (success: Bool, errorMsg: String?) -> Void) -> Void {
     
         let url = UdacityCLient.Constants.baseURL + UdacityCLient.Methods.session
-        HttpClient.shared_instance().httpDelete(url, parameters: nil) { data, error in
+        HttpClient.shared_instance().httpDelete(url, parameters: nil) { data, errorMsg in
             var errorMsg: String! = nil
-            if error != nil { // Handle error…
-                errorMsg = error
-                completion_handler(success: errorMsg == nil, errorMsg: errorMsg)
+            if let errorMsg = errorMsg {
+                completion_handler(success: false, errorMsg: errorMsg)
             } else {
                 // println(NSString(data: data, encoding: NSUTF8StringEncoding)) // http DELETE logout
                 HttpClient.parseJSONWithCompletionHandler(data) { result, error in
@@ -109,8 +108,8 @@ class UdacityCLient: NSObject {
                     } else {
                         errorMsg = self.getAndSetSessionFromResult(result)
                     }
+                    completion_handler(success: errorMsg == nil, errorMsg: errorMsg)
                 }
-                completion_handler(success: errorMsg == nil, errorMsg: errorMsg)
             }
         }
     }
@@ -129,7 +128,7 @@ class UdacityCLient: NSObject {
                     if let error = error {
                         errorMsg = error.localizedDescription
                     } else {
-                        (userInfo, errorMsg) = self.getAndSetUserInfoFromResult(result)
+                        (userInfo, errorMsg) = self.getUserInfoFromResult(result)
                     }
                     completion_handler(userInfo: userInfo, errorMsg: errorMsg)
                 }
@@ -197,7 +196,7 @@ class UdacityCLient: NSObject {
         let lastName: String
     }
     
-    func getAndSetUserInfoFromResult(result: AnyObject) -> (userInfo: UserInfo!, errorMsg: String!) {
+    func getUserInfoFromResult(result: AnyObject) -> (userInfo: UserInfo!, errorMsg: String!) {
         
         var userInfo: UserInfo! = nil
         var errorMsg: String! = nil
