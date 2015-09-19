@@ -43,7 +43,9 @@ class MeTableViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let app = UIApplication.sharedApplication()
         let studentLocation = myLocations[indexPath.row]
-        AlertController.Alert(msg: studentLocation.getStudentRepr(), title: "Details").dispatchAlert(self)
+        AlertController.Alert(
+            msg: studentLocation.getStudentRepr(),
+            title: AlertController.AlertTitle.Details).dispatchAlert(self)
     }
     
     // Support functions

@@ -41,14 +41,20 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
             if let url = NSURL(string: urlString) {
                 let result = app.openURL(url)
                 if !result {
-                    AlertController.Alert(msg: urlString, title: "Failed to open URL").showAlert(self)
+                    AlertController.Alert(
+                        msg: urlString,
+                        title: AlertController.AlertTitle.OpenURLError).showAlert(self)
                 }
             } else {
-                AlertController.Alert(msg: urlString, title: "Failed to open URL").showAlert(self)
+                AlertController.Alert(
+                    msg: urlString,
+                    title: AlertController.AlertTitle.OpenURLError).showAlert(self)
             }
             
         } else {
-            AlertController.Alert(msg: "no URL was provided", title: "Empty URL").showAlert(self)
+            AlertController.Alert(
+                msg: "no URL was provided",
+                title: AlertController.AlertTitle.MissingURLError).showAlert(self)
         }
     }
     

@@ -22,7 +22,8 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
         // Do any additional setup after loading the view, typically from a nib.
         let accessToken = FBSDKAccessToken.currentAccessToken()
         if let accessToken = accessToken {
-            let alertTitle = "Facebook login failed"
+            // in case somthing bad happens
+            let alertTitle = AlertController.AlertTitle.FBLoginFailed
             loginWithFB(alertTitle)
         }
     }
@@ -32,16 +33,16 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
     func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) -> Void {
         
         activityIndicator.stopAnimating()
-        let alertTitle = "Facebook login failed"
+        let alertTitle = AlertController.AlertTitle.FBLoginFailed
         if let error = error {
             let errorMsg = error.domain + ": " + error.description
-            AlertController.Alert(msg: errorMsg, title: title).showAlert(self)
+            AlertController.Alert(msg: errorMsg, title: alertTitle).showAlert(self)
         } else {
             if let token = result!.token {
                 loginWithFB(alertTitle)
             } else {
                 let errorMsg = "no token"
-                AlertController.Alert(msg: errorMsg, title: title).showAlert(self)
+                AlertController.Alert(msg: errorMsg, title: alertTitle).showAlert(self)
             }
         }
     }
@@ -55,10 +56,10 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
             var msg: String? = ""
             var alertTitle = ""
             if success {
-                alertTitle = "Facebook logout complete"
+                alertTitle = AlertController.AlertTitle.FBLogoutCompleted
                 msg = ""
             } else {
-                alertTitle = "Facebook logout error"
+                alertTitle = AlertController.AlertTitle.FBLogoutFailed
                 msg = errorMsg
             }
             AlertController.Alert(msg: msg, title: alertTitle).dispatchAlert(self)
@@ -84,17 +85,17 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
         
         let email = emailTextField.text
         let password = passwordTextField.text
-        let alertTitle = "Login error"
+        let alertTitle = AlertController.AlertTitle.LoginError
         
         emailTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
         
         if email == "" {
             let msg = "Empty email field"
-            AlertController.Alert(msg: msg, title: title).showAlert(self)
+            AlertController.Alert(msg: msg, title: alertTitle).showAlert(self)
         } else if password == "" {
             let msg = "Empty password field"
-            AlertController.Alert(msg: msg, title: title).showAlert(self)
+            AlertController.Alert(msg: msg, title: alertTitle).showAlert(self)
         } else {
             loginWithEmailID(email, password: password, alertTitle: alertTitle)
         }
@@ -104,12 +105,12 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         
-        let alertTitle = "Login error"
+        let alertTitle = AlertController.AlertTitle.LoginError
         if textField == emailTextField {
             textField.resignFirstResponder()
             if emailTextField.text == "" {
                 let msg = "Empty email field"
-                AlertController.Alert(msg: msg, title: title).showAlert(self)
+                AlertController.Alert(msg: msg, title: alertTitle).showAlert(self)
             } else {
                 passwordTextField.becomeFirstResponder()
             }

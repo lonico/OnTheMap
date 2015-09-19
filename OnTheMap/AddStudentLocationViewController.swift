@@ -47,8 +47,7 @@ class AddStudentLocationViewController: UIViewController, UITextFieldDelegate {
     func taskForFindButtonTouchUp() -> Void {
         let location = locationInputTextField.text
         if location == "" {
-            let alert = AlertController.Alert(msg: "please enter an address", title: "Empty location")
-            alert.showAlert(self)
+            AlertController.Alert(msg: "please enter an address", title: AlertController.AlertTitle.MissingLocationError).showAlert(self)
         } else {
             getPlacemarkAndSegue(location)
         }
@@ -72,7 +71,9 @@ class AddStudentLocationViewController: UIViewController, UITextFieldDelegate {
                 if let alert = alert {
                     alert.dispatchAlert(self)
                 } else {
-                    AlertController.Alert(msg: "alert and placemark can't be both nil", title: "Internal error").dispatchAlert(self)
+                    AlertController.Alert(
+                        msg: "alert and placemark can't be both nil",
+                        title: AlertController.AlertTitle.InternalError).dispatchAlert(self)
                 }
             }
         }

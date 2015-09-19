@@ -29,7 +29,7 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
             mapView.addAnnotation(MKPlacemark(placemark: placemark))
             mediaURL.becomeFirstResponder()
         } else {
-            let alert = AlertController.Alert(msg: "placemark not set", title: "Internal Error")
+            let alert = AlertController.Alert(msg: "placemark not set", title: AlertController.AlertTitle.InternalError)
             alert.showAlert(self)
         }
     }
@@ -49,18 +49,23 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func checkLinkInSafariButtonTouchUp(sender: UIButton) {
         if mediaURL.text == "" {
-            let alert = AlertController.Alert(msg: "please enter URL", title: "Empty URL string")
-            alert.showAlert(self)
+            AlertController.Alert(
+                msg: "please enter URL",
+                title: AlertController.AlertTitle.MissingURLError).showAlert(self)
         } else {
             let app = UIApplication.sharedApplication()
             let urlString = mediaURL.text
             if let url = NSURL(string: urlString) {
                 let result = app.openURL(url)
                 if !result {
-                    AlertController.Alert(msg: urlString, title: "Failed to open URL").showAlert(self)
+                    AlertController.Alert(
+                        msg: urlString,
+                        title: AlertController.AlertTitle.OpenURLError).showAlert(self)
                 }
             } else {
-                AlertController.Alert(msg: urlString, title: "Failed to open URL").showAlert(self)
+                AlertController.Alert(
+                    msg: urlString,
+                    title: AlertController.AlertTitle.OpenURLError).showAlert(self)
             }
         }
     }
@@ -74,7 +79,7 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
     
     func taskForSubmitAction() -> Void {
         if mediaURL.text == "" {
-            let alert = AlertController.Alert(msg: "please enter URL", title: "Empty URL string")
+            let alert = AlertController.Alert(msg: "please enter URL", title: AlertController.AlertTitle.MissingURLError)
             alert.showAlert(self)
         } else {
             activiyIndicator.startAnimating()
@@ -89,19 +94,27 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
                     
                     self.update(studentLocation)  { createdAt, updatedAt, errorMsg in
                         if createdAt != nil || updatedAt != nil {
-                            alert = AlertController.Alert(msg: "posted info for \(userInfo.firstName) \(userInfo.lastName)", title: "Success") { action in
+                            alert = AlertController.Alert(
+                                msg: "posted info for \(userInfo.firstName) \(userInfo.lastName)",
+                                title: AlertController.AlertTitle.Success) { action in
                                 self.popOut()
-                            }
+                                }
                         } else {
-                            alert = AlertController.Alert(msg: errorMsg, title: "Error, cannot post user info")
+                            alert = AlertController.Alert(
+                                msg: errorMsg,
+                                title: AlertController.AlertTitle.PostingUserInfoError)
                         }
                         self.dismissProgressIndicators()
                         alert.dispatchAlert(self)
                     }
                 } else if errorMsg != nil {
-                    alert = AlertController.Alert(msg: errorMsg, title: "Error, cannot get user info")
+                    alert = AlertController.Alert(
+                        msg: errorMsg,
+                        title: AlertController.AlertTitle.GettingUserInfoError)
                 } else {
-                    alert = AlertController.Alert(msg: "Internal error: userInfo and errorMsg are both nil", title: "Error, cannot get user info")
+                    alert = AlertController.Alert(
+                        msg: "Internal error: userInfo and errorMsg are both nil",
+                        title: AlertController.AlertTitle.GettingUserInfoError)
                 }
 
                 if alert != nil {

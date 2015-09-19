@@ -21,7 +21,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             if success {
                 self.setAnnotationsForStudentLocations()
             } else {
-                AlertController.Alert(msg: errorMsg, title: "Error reaading student locations").dispatchAlert(self)
+                AlertController.Alert(msg: errorMsg, title: AlertController.AlertTitle.ReadStudentLocatinsError).dispatchAlert(self)
             }
         }
     }
@@ -92,10 +92,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             if let url = NSURL(string: urlString) {
                 let result = app.openURL(url)
                 if !result {
-                    AlertController.Alert(msg: urlString, title: "Failed to open URL").showAlert(self)
+                    AlertController.Alert(
+                        msg: urlString,
+                        title: AlertController.AlertTitle.OpenURLError).showAlert(self)
                 }
             } else {
-                AlertController.Alert(msg: urlString, title: "Failed to open URL").showAlert(self)
+                AlertController.Alert(
+                    msg: urlString,
+                    title: AlertController.AlertTitle.OpenURLError).showAlert(self)
             }
         }
     }

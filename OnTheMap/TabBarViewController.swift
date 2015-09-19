@@ -48,7 +48,7 @@ class TabBarViewController: UITabBarController {
                     }
                 }
             } else {
-                AlertController.Alert(msg: errorMsg, title: "Refresh error").dispatchAlert(self)
+                AlertController.Alert(msg: errorMsg, title: AlertController.AlertTitle.RefreshError).dispatchAlert(self)
             }
         }
         refreshButton.enabled = true
@@ -58,13 +58,13 @@ class TabBarViewController: UITabBarController {
         
         UdacityCLient.shared_instance().logout() { success, errorMsg in
             if success {
-                let alert = AlertController.Alert(msg: "", title: "Logged out") { action in
+                let alert = AlertController.Alert(msg: "", title: AlertController.AlertTitle.LoggedOut) { action in
                     let controller = self.storyboard!.instantiateViewControllerWithIdentifier("loginViewController") as! UIViewController
                     self.presentViewController(controller, animated: true, completion: nil)
                 }
                 alert.dispatchAlert(self)
             } else {
-                AlertController.Alert(msg: errorMsg, title: "Logout error").dispatchAlert(self)
+                AlertController.Alert(msg: errorMsg, title: AlertController.AlertTitle.LogoutError).dispatchAlert(self)
             }
         }
     }

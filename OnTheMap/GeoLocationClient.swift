@@ -20,18 +20,26 @@ struct GeoLocationClient {
             var studentPlacemark: CLPlacemark! = nil
             var alert: AlertController.Alert! = nil
             if let error = error {
-                alert = AlertController.Alert(msg: error.localizedDescription, title: "Cannot localize address")
+                alert = AlertController.Alert(
+                    msg: error.localizedDescription,
+                    title: AlertController.AlertTitle.LocalizationError)
             } else if let placemarks = placemarks {
                 if placemarks.count == 0 {
-                    alert = AlertController.Alert(msg: "Unexpected error (empty array)", title: "Cannot localize address")
+                    alert = AlertController.Alert(
+                        msg: "Unexpected error (empty array)",
+                        title: AlertController.AlertTitle.LocalizationError)
                 } else {
                     if placemarks.count > 1 {
-                        alert = AlertController.Alert(msg: "Got \(placemarks.count) results, using the first one", title: "Ambiguous address")
+                        alert = AlertController.Alert(
+                            msg: "Got \(placemarks.count) results, using the first one",
+                            title: AlertController.AlertTitle.LocalizationAmbiguityWarning)
                     }
                     studentPlacemark = placemarks[0] as! CLPlacemark
                 }
             } else {
-                alert = AlertController.Alert(msg: "Unexpected error (nil)", title: "Cannot localize address")
+                alert = AlertController.Alert(
+                    msg: "Unexpected error (nil)",
+                    title: AlertController.AlertTitle.LocalizationError)
             }
             completion_handler(placemark: studentPlacemark, alert: alert)
         }
