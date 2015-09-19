@@ -29,8 +29,9 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
             mapView.addAnnotation(MKPlacemark(placemark: placemark))
             mediaURL.becomeFirstResponder()
         } else {
-            let alert = AlertController.Alert(msg: "placemark not set", title: AlertController.AlertTitle.InternalError)
-            alert.showAlert(self)
+            AlertController.Alert(
+                msg: "placemark not set",
+                title: AlertController.AlertTitle.InternalError).showAlert(self)
         }
     }
     
