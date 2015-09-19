@@ -33,6 +33,7 @@ class TabBarViewController: UITabBarController {
     
     @IBAction func refreshButtonTouch(sender: UIBarButtonItem) {
 
+        refreshButton.enabled = false
         ParseClient.shared_instance().getAllStudentLocations() { success, errorMsg in
             if success {
                 for vc in self.viewControllers as! [UIViewController] {
@@ -50,6 +51,7 @@ class TabBarViewController: UITabBarController {
                 AlertController.Alert(msg: errorMsg, title: "Refresh error").dispatchAlert(self)
             }
         }
+        refreshButton.enabled = true
     }
     
     @IBAction func logoutButtonTouch(sender: UIBarButtonItem) {

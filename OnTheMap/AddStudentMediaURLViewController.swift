@@ -77,14 +77,14 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
             let alert = AlertController.Alert(msg: "please enter URL", title: "Empty URL string")
             alert.showAlert(self)
         } else {
-            let latitude = placemark.location.coordinate.latitude
-            let longitude = placemark.location.coordinate.longitude
             activiyIndicator.startAnimating()
             setAlpha(0.5)
             UdacityCLient.shared_instance().getUserInfo() { userInfo, errorMsg in
                 var alert: AlertController.Alert! = nil
                 if userInfo != nil {
                     
+                    let latitude = self.placemark.location.coordinate.latitude
+                    let longitude = self.placemark.location.coordinate.longitude
                     let studentLocation = StudentLocation(objectId: "", uniqueKey: userInfo.uniqueKey, firstName: userInfo.firstName, lastName: userInfo.lastName, mapString: self.mapString, mediaURL: self.mediaURL.text, latitude: latitude, longitude: longitude)
                     
                     self.update(studentLocation)  { createdAt, updatedAt, errorMsg in
