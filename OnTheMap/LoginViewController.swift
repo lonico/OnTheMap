@@ -15,9 +15,15 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var facebookLoginButton: FBSDKLoginButton!
+    @IBOutlet weak var errorView: UIView!
+    @IBOutlet weak var errorTitle: UILabel!
+    @IBOutlet weak var errorMsg: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        errorView.layer.cornerRadius = 10.0
+        
+        hideError()
         activityIndicator.stopAnimating()
         // Do any additional setup after loading the view, typically from a nib.
         let accessToken = FBSDKAccessToken.currentAccessToken()
@@ -33,6 +39,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
     func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) -> Void {
         
         activityIndicator.stopAnimating()
+        hideError()
         let alertTitle = AlertController.AlertTitle.FBLoginFailed
         if let error = error {
             let errorMsg = error.domain + ": " + error.description
@@ -43,12 +50,14 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
             } else {
                 let errorMsg = "no token"
                 AlertController.Alert(msg: errorMsg, title: alertTitle).showAlert(self)
+                showError(errorMsg, title: alertTitle)
             }
         }
     }
     
     func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) -> Void {
         
+        hideError()
         activityIndicator.startAnimating()
         UdacityCLient.shared_instance().logout() { success, errorMsg in
             
@@ -62,7 +71,10 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
                 alertTitle = AlertController.AlertTitle.FBLogoutFailed
                 msg = errorMsg
             }
-            AlertController.Alert(msg: msg, title: alertTitle).dispatchAlert(self)
+            let alert = AlertController.Alert(msg: errorMsg, title: alertTitle) { action in
+                self.dispatchError(errorMsg, title: alertTitle)
+            }
+            alert.dispatchAlert(self)
         }
     }
     
@@ -70,10 +82,13 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
     // FB login button does not require an action
     
     @IBAction func loginButtonTouchUp(sender: UIButton) {
+        
         actionLoginWithEmailPassword()
     }
     
     @IBAction func signUpTouchUp(sender: UIButton) {
+        
+        hideError()
         if let udacityLink = NSURL(string : "https://www.udacity.com/account/auth#!/signup") {
             UIApplication.sharedApplication().openURL(udacityLink)
         }
@@ -87,15 +102,18 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
         let password = passwordTextField.text
         let alertTitle = AlertController.AlertTitle.LoginError
         
+        hideError()
         emailTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
         
         if email == "" {
             let msg = "Empty email field"
             AlertController.Alert(msg: msg, title: alertTitle).showAlert(self)
+            showError(msg, title: alertTitle)
         } else if password == "" {
             let msg = "Empty password field"
             AlertController.Alert(msg: msg, title: alertTitle).showAlert(self)
+            showError(msg, title: alertTitle)
         } else {
             loginWithEmailID(email, password: password, alertTitle: alertTitle)
         }
@@ -111,7 +129,9 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
             if emailTextField.text == "" {
                 let msg = "Empty email field"
                 AlertController.Alert(msg: msg, title: alertTitle).showAlert(self)
+                showError(msg, title: alertTitle)
             } else {
+                hideError()
                 passwordTextField.becomeFirstResponder()
             }
         } else if textField == passwordTextField {
@@ -131,7 +151,10 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
             if success {
                 self.completeLogin()
             } else {
-                AlertController.Alert(msg: errorMsg, title: alertTitle).dispatchAlert(self)
+                let alert = AlertController.Alert(msg: errorMsg, title: alertTitle) { action in
+                    self.dispatchError(errorMsg, title: alertTitle)
+                }
+                alert.dispatchAlert(self)
             }
         }
     }
@@ -144,7 +167,10 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
             if success {
                 self.completeLogin()
             } else {
-                AlertController.Alert(msg: errorMsg, title: alertTitle).dispatchAlert(self)
+                let alert = AlertController.Alert(msg: errorMsg, title: alertTitle) { action in
+                    self.dispatchError(errorMsg, title: alertTitle)
+                    }
+                alert.dispatchAlert(self)
             }
         }
     }
@@ -161,6 +187,36 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, UITextFie
         dispatch_async(dispatch_get_main_queue()) {
             self.activityIndicator.stopAnimating()
         }
+    }
+    
+    func setError(msg: String!, title: String!) {
+        if let title = title {
+            errorTitle.text = title
+        } else {
+            errorTitle.text = ""
+        }
+        if let msg = msg {
+            errorMsg.text = msg
+        } else {
+            errorMsg.text = ""
+        }
+    }
+
+    func showError(msg: String!, title: String!) {
+        setError(msg, title: title)
+        errorView.hidden = false
+    }
+    
+    func dispatchError(msg: String!, title: String!) {
+        setError(msg, title: title)
+        dispatch_async(dispatch_get_main_queue()) {
+            self.errorView.hidden = false
+        }
+    }
+    
+    func hideError() {
+        setError("", title: "")
+        errorView.hidden = true
     }
 }
 
