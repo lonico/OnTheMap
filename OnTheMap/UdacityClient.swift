@@ -119,12 +119,14 @@ class UdacityCLient: NSObject {
     func getUserInfo(completion_handler: (userInfo: UserInfo!, errorMsg: String?) -> Void) -> Void {
         
         getDataForUser(udacity_user_id) { data, errorMsg in
-            var errorMsg: String! = nil
-            var userInfo: UserInfo! = nil
+            
             if let errorMsg = errorMsg {
                 completion_handler(userInfo: nil, errorMsg: errorMsg)
             } else {
                 HttpClient.parseJSONWithCompletionHandler(data) { result, error in
+                    
+                    var errorMsg: String! = nil
+                    var userInfo: UserInfo! = nil
                     if let error = error {
                         errorMsg = error.localizedDescription
                     } else {
