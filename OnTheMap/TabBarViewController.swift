@@ -50,8 +50,10 @@ class TabBarViewController: UITabBarController {
             } else {
                 AlertController.Alert(msg: errorMsg, title: AlertController.AlertTitle.RefreshError).dispatchAlert(self)
             }
+            dispatch_async(dispatch_get_main_queue()) {
+                self.refreshButton.enabled = true
+            }
         }
-        refreshButton.enabled = true
     }
     
     @IBAction func logoutButtonTouch(sender: UIBarButtonItem) {

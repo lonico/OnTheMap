@@ -16,6 +16,7 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Return the number of rows in the section.
+        println(ParseClient.shared_instance().studentLocations.count)
         return ParseClient.shared_instance().studentLocations.count
     }
     
