@@ -57,8 +57,8 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
                 msg: "no URL was provided",
                 title: AlertController.AlertTitle.MissingURLError).showAlert(self)
         }
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
-    
     
     // MARK: refresh method
     func refreshTable() -> Void {
