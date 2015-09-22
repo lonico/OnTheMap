@@ -30,7 +30,7 @@ class ParseClient {
                 #if DEBUG
                 println(">>> " + __FUNCTION__ + " count new: \(self.newStudentLocations.count)")
                 #endif
-                self.studentLocations = self.newStudentLocations
+                self.studentLocations = self.newStudentLocations.sorted({$0.updatedAt > $1.updatedAt})
             }
             completion_handler(success: errorMsg == nil, errorMsg: errorMsg)
         }
@@ -282,6 +282,7 @@ class ParseClient {
         static let longitude = "longitude"
         static let latitude  = "latitude"
         static let mapString = "mapString"
+        static let updatedAt = "updatedAt"
     }
     
     struct JsonResponseKeys {
@@ -293,7 +294,7 @@ class ParseClient {
     }
     
     // skip uniqueKey and mapString
-    static let JsonStudentAllInputKeysForStrings = [JsonStudentKeys.objectId, JsonStudentKeys.uniqueKey, JsonStudentKeys.firstname, JsonStudentKeys.lastname, JsonStudentKeys.mediaURL, JsonStudentKeys.mapString]
+    static let JsonStudentAllInputKeysForStrings = [JsonStudentKeys.objectId, JsonStudentKeys.uniqueKey, JsonStudentKeys.firstname, JsonStudentKeys.lastname, JsonStudentKeys.mediaURL, JsonStudentKeys.mapString, JsonStudentKeys.updatedAt]
     
     static let JsonStudentAllInputKeysForDoubles = [JsonStudentKeys.latitude, JsonStudentKeys.longitude]
     

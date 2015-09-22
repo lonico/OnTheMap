@@ -21,6 +21,7 @@ struct StudentLocation {
     let mediaURL: String
     let latitude: Double
     let longitude: Double
+    let updatedAt: String
     
     func getFullNameFromStudent() -> String {
         return join(" ", [self.firstName, self.lastName])
@@ -55,6 +56,7 @@ struct StudentLocation {
         case ParseClient.JsonStudentKeys.latitude: return self.latitude
         case ParseClient.JsonStudentKeys.longitude: return self.longitude
         case ParseClient.JsonStudentKeys.mapString: return self.mapString
+        case ParseClient.JsonStudentKeys.updatedAt: return self.updatedAt
         default: return "N/A"
         }
     }
@@ -67,7 +69,8 @@ struct StudentLocation {
                           getFullNameFromStudent(),
                           mapString,
                           _long + " - " + _lat,
-                          mediaURL])
+                          mediaURL,
+                          "last update: \(updatedAt)"])
     }
     
     func doubleToTextWithNWSE(var value: Double, direction: Direction) -> String {
@@ -127,6 +130,7 @@ extension StudentLocation {
         var _latitude  = 0.0
         var _longitude = 0.0
         var _mapString = ""
+        var _updatedAt = ""
         
         for key in ParseClient.JsonStudentAllInputKeysForStrings {
             var value = ""
@@ -140,6 +144,7 @@ extension StudentLocation {
             case ParseClient.JsonStudentKeys.lastname: _lastName = value
             case ParseClient.JsonStudentKeys.mediaURL: _mediaURL = value
             case ParseClient.JsonStudentKeys.mapString: _mapString = value
+            case ParseClient.JsonStudentKeys.updatedAt: _updatedAt = value
             default: break  // make Xcode happy, even though all cases are exhausted
             }
             
@@ -164,6 +169,7 @@ extension StudentLocation {
         latitude  = _latitude
         longitude = _longitude
         mapString = _mapString
+        updatedAt = _updatedAt
     }
 }
 

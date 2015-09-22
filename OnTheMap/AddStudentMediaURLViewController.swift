@@ -91,7 +91,7 @@ class AddStudentMediaURLViewController: UIViewController, UITextFieldDelegate {
                     
                     let latitude = self.placemark.location.coordinate.latitude
                     let longitude = self.placemark.location.coordinate.longitude
-                    let studentLocation = StudentLocation(objectId: "", uniqueKey: userInfo.uniqueKey, firstName: userInfo.firstName, lastName: userInfo.lastName, mapString: self.mapString, mediaURL: self.mediaURL.text, latitude: latitude, longitude: longitude)
+                    let studentLocation = StudentLocation(objectId: "", uniqueKey: userInfo.uniqueKey, firstName: userInfo.firstName, lastName: userInfo.lastName, mapString: self.mapString, mediaURL: self.mediaURL.text, latitude: latitude, longitude: longitude, updatedAt: "")
                     
                     self.update(studentLocation)  { createdAt, updatedAt, errorMsg in
                         if createdAt != nil || updatedAt != nil {
