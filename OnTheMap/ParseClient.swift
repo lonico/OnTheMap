@@ -142,7 +142,9 @@ class ParseClient {
         
         let url = ParseClient.Constants.baseURL + ParseClient.Methods.StudentLocation
         let parms = [String: AnyObject]()
-        let jsonPostData = studentLocation.getDictFromStudent()
+        var jsonPostData = studentLocation.getDictFromStudent()
+        // let the server update the date
+        jsonPostData.removeValueForKey(JsonStudentKeys.updatedAt)
         
         HttpClient.shared_instance().httpPost(url, parameters: parms, jsonBody: jsonPostData, httpHeaderFields: ParseClient.HTTPHeaderFields.keyvalues, offset: 0) { data, error in
             var errorMsg: String! = nil
@@ -183,7 +185,8 @@ class ParseClient {
         let url = ParseClient.Constants.baseURL + ParseClient.Methods.StudentLocation + "/" + objectId
         let parms = [String: AnyObject]()
         var jsonPostData = studentLocation.getDictFromStudent()
-        //jsonPostData.removeValueForKey(JsonStudentKeys.objectId)
+        // let the server update the date
+        jsonPostData.removeValueForKey(JsonStudentKeys.updatedAt)
         
         HttpClient.shared_instance().httpPut(url, parameters: parms, jsonBody: jsonPostData, httpHeaderFields: ParseClient.HTTPHeaderFields.keyvalues, offset: 0) { data, error in
             var errorMsg: String! = nil

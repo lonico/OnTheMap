@@ -45,7 +45,8 @@ class MeTableViewController: UIViewController, UITableViewDataSource, UITableVie
         let studentLocation = myLocations[indexPath.row]
         AlertController.Alert(
             msg: studentLocation.getStudentRepr(),
-            title: AlertController.AlertTitle.Details).dispatchAlert(self)
+            title: AlertController.AlertTitle.Details).showAlert(self)
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
     // Support functions
